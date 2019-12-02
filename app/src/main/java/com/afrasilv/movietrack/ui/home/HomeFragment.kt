@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.afrasilv.movietrack.R
+import com.afrasilv.movietrack.ui.home.HomeViewModel.UiModel
 
 class HomeFragment : Fragment() {
 
@@ -26,6 +27,18 @@ class HomeFragment : Fragment() {
         homeViewModel.text.observe(this, Observer {
             textView.text = it
         })
+
+        homeViewModel.model.observe(this, Observer(::updateUI))
+        homeViewModel.discoverMovies()
         return root
+    }
+
+    private fun updateUI(model: UiModel) {
+
+        when (model) {
+            is UiModel.Content -> {
+
+            }
+        }
     }
 }
