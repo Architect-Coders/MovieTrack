@@ -8,6 +8,13 @@ import retrofit2.http.Query
 interface MovieTrackService {
 
     @GET("discover/movie?sort_by=popularity.desc")
-    suspend fun discoverMoviesByPopularityAsync (
-        @Query("api_key") apiKey: String): Response<BaseResponse>
+    suspend fun discoverMoviesByPopularityAsync(
+        @Query("api_key") apiKey: String
+    ): Response<BaseResponse>
+
+    @GET("search/movie")
+    suspend fun searchMovieByName(
+        @Query("api_key") apiKey: String,
+        @Query("query") name: String
+    ): Response<BaseResponse>
 }

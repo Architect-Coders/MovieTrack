@@ -1,4 +1,4 @@
-package com.afrasilv.movietrack.ui.home
+package com.afrasilv.movietrack.ui.search
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,7 +8,7 @@ import com.afrasilv.movietrack.ui.home.model.MovieInfo
 import com.afrasilv.movietrack.ui.home.repository.MoviesRepository
 import kotlinx.coroutines.launch
 
-class HomeViewModel : BaseViewModel() {
+class SearchViewModel : BaseViewModel() {
 
     private val _model = MutableLiveData<UiModel>()
     val model: LiveData<UiModel>
@@ -21,9 +21,9 @@ class HomeViewModel : BaseViewModel() {
         object RequestLocationPermission : UiModel()
     }
 
-    fun discoverMovies() {
+    fun searchMovies(name: String) {
         coroutineContext.plus(launch {
-            when (val result = MoviesRepository.discoverMoviesByPopularity()) {
+            when (val result = MoviesRepository.searchMoviesByName(name)) {
                 is Either.Left -> {
                     //Error
                 }

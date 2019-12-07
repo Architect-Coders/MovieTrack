@@ -40,6 +40,7 @@ ext {
     junit = '1.1.0'
     espresso = '3.2.0'
     arrow_version = "0.10.3"
+    glide = "4.10.0"
 }
 
 dependencies {
@@ -67,4 +68,8 @@ dependencies {
     implementation "io.arrow-kt:arrow-core:$arrow_version"
     implementation "io.arrow-kt:arrow-syntax:$arrow_version"
     kapt    "io.arrow-kt:arrow-meta:$arrow_version"
+
+    //Glide
+    implementation "com.github.bumptech.glide:glide:$glide"
+    annotationProcessor "com.github.bumptech.glide:compiler:$glide"
 }

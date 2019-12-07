@@ -12,3 +12,6 @@
 /captures
 .externalNativeBuild
 .cxx
+
+# API KEY
+app/src/main/java/com/afrasilv/movietrack/ConstApiKey.kt
