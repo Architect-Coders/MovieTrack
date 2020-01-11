@@ -31,7 +31,10 @@ class MoviesRepository(private val application: MovieTrackApp) {
 
     suspend fun searchMoviesByName(name: String): Either<Failure, BaseResponse> {
         return try {
-            val response = RetrofitAPI.service.searchMovieByName(SERVICE_API_KEY, URLEncoder.encode(name, "UTF-8"))
+            val response = RetrofitAPI.service.searchMovieByName(
+                SERVICE_API_KEY,
+                URLEncoder.encode(name, "UTF-8")
+            )
             if (response.isSuccessful && response.body() != null) {
                 val searchedList = response.body()!!
                 Either.right(searchedList)
@@ -42,9 +45,19 @@ class MoviesRepository(private val application: MovieTrackApp) {
         }
     }
 
-    suspend fun checkIfMovieIsFav(movieId: Int): Either<Failure, Boolean> = withContext(Dispatchers.IO) {
-        Either.right(application.db.movieDao().findById(movieId) != null)
+    suspend fun getFavoriteMovies(): Either<Failure, List<MovieInfo>> {
+        val dataList = application.db.movieDao().getAll()
+        return if (dataList.isNotEmpty()) {
+            Either.right(dataList.map(MovieFavDb::convertToMovieInfo))
+        } else {
+            Either.left(Failure(FailureModel("", "", "", ErrorType.SERVICE_ERROR)))
+        }
     }
+
+    suspend fun checkIfMovieIsFav(movieId: Int): Either<Failure, Boolean> =
+        withContext(Dispatchers.IO) {
+            Either.right(application.db.movieDao().findById(movieId) != null)
+        }
 
     suspend fun removeIfFav(movie: MovieInfo) = withContext(Dispatchers.IO) {
         val movieDb = movie.convertToDbMovie()
@@ -68,4 +81,17 @@ private fun MovieInfo.convertToDbMovie() = MovieFavDb(
     originalLanguage,
     originalTitle,
     voteAverage
+)
+
+private fun MovieFavDb.convertToMovieInfo() = MovieInfo(
+    id = id,
+    title = title,
+    popularity = popularity,
+    overview = overview,
+    posterPath = posterPath,
+    backdropPath = backdropPath,
+    releaseDate = releaseDate,
+    originalLanguage = originalLanguage,
+    originalTitle = originalTitle,
+    voteAverage = voteAverage
 )
