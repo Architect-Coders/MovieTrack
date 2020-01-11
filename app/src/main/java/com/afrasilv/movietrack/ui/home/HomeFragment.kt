@@ -1,5 +1,6 @@
 package com.afrasilv.movietrack.ui.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.afrasilv.movietrack.R
+import com.afrasilv.movietrack.ui.details.DetailsMovieActivity
 import com.afrasilv.movietrack.ui.home.HomeViewModel.UiModel
 import kotlinx.android.synthetic.main.fragment_home.*
 
@@ -38,8 +40,12 @@ class HomeFragment : Fragment() {
     private fun updateUI(model: UiModel) {
 
         when (model) {
-            is UiModel.Content -> {
-                adapter.updateData(model.movies)
+            is UiModel.Content -> adapter.updateData(model.movies)
+            is UiModel.Navigation -> {
+                Intent(context, DetailsMovieActivity::class.java).apply {
+                    putExtra("selectedItem", model.movie)
+                    startActivity(this)
+                }
             }
         }
     }
