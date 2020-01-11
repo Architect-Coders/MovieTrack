@@ -8,7 +8,7 @@ import com.afrasilv.movietrack.ui.home.model.MovieInfo
 import com.afrasilv.movietrack.ui.home.repository.MoviesRepository
 import kotlinx.coroutines.launch
 
-class SearchViewModel : BaseViewModel() {
+class SearchViewModel(private val moviesRepository: MoviesRepository) : BaseViewModel() {
 
     private val _model = MutableLiveData<UiModel>()
     val model: LiveData<UiModel>
@@ -23,7 +23,7 @@ class SearchViewModel : BaseViewModel() {
 
     fun searchMovies(name: String) {
         coroutineContext.plus(launch {
-            when (val result = MoviesRepository.searchMoviesByName(name)) {
+            when (val result = moviesRepository.searchMoviesByName(name)) {
                 is Either.Left -> {
                     //Error
                 }

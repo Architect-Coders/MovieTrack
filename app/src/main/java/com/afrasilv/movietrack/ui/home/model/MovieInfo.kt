@@ -19,5 +19,5 @@ data class MovieInfo(
     @SerializedName("genre_ids") val genreIds : List<Int>,
     @SerializedName("vote_average") val voteAverage : Double,
     val overview : String,
-    @SerializedName("release_date") val release_date : String
+    @SerializedName("release_date") val releaseDate : String
 ) : Parcelable

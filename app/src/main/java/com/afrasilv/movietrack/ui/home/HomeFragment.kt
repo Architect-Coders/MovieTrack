@@ -8,9 +8,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.afrasilv.movietrack.MovieTrackApp
 import com.afrasilv.movietrack.R
+import com.afrasilv.movietrack.getViewModel
 import com.afrasilv.movietrack.ui.details.DetailsMovieActivity
+import com.afrasilv.movietrack.ui.details.DetailsViewModel
 import com.afrasilv.movietrack.ui.home.HomeViewModel.UiModel
+import com.afrasilv.movietrack.ui.home.repository.MoviesRepository
 import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : Fragment() {
@@ -23,8 +27,9 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        homeViewModel =
-            ViewModelProviders.of(this).get(HomeViewModel::class.java)
+        homeViewModel = getViewModel {
+            HomeViewModel(MoviesRepository(activity!!.applicationContext as MovieTrackApp))
+        }
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
@@ -33,7 +38,7 @@ class HomeFragment : Fragment() {
 
         adapter = HomeAdapter(homeViewModel::movieClicked)
         home_list.adapter = adapter
-        homeViewModel.model.observe(this, Observer(::updateUI))
+        homeViewModel.model.observe(viewLifecycleOwner, Observer(::updateUI))
         homeViewModel.discoverMovies()
     }
 

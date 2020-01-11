@@ -11,9 +11,13 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.afrasilv.movietrack.MovieTrackApp
 import com.afrasilv.movietrack.R
+import com.afrasilv.movietrack.getViewModel
 import com.afrasilv.movietrack.ui.details.DetailsMovieActivity
 import com.afrasilv.movietrack.ui.home.HomeAdapter
+import com.afrasilv.movietrack.ui.home.HomeViewModel
+import com.afrasilv.movietrack.ui.home.repository.MoviesRepository
 import kotlinx.android.synthetic.main.fragment_search.*
 
 
@@ -27,8 +31,9 @@ class SearchFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        searchViewModel =
-            ViewModelProviders.of(this).get(SearchViewModel::class.java)
+        searchViewModel = getViewModel {
+            SearchViewModel(MoviesRepository(activity!!.applicationContext as MovieTrackApp))
+        }
         return inflater.inflate(R.layout.fragment_search, container, false)
     }
 

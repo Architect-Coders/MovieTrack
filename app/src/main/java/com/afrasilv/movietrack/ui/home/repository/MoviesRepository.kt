@@ -1,15 +1,20 @@
 package com.afrasilv.movietrack.ui.home.repository
 
 import arrow.core.Either
+import com.afrasilv.movietrack.MovieTrackApp
 import com.afrasilv.movietrack.SERVICE_API_KEY
+import com.afrasilv.movietrack.model.database.MovieFavDb
 import com.afrasilv.movietrack.retrofit.RetrofitAPI
 import com.afrasilv.movietrack.ui.base.ErrorType
 import com.afrasilv.movietrack.ui.base.Failure
 import com.afrasilv.movietrack.ui.base.FailureModel
 import com.afrasilv.movietrack.ui.home.model.BaseResponse
+import com.afrasilv.movietrack.ui.home.model.MovieInfo
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.net.URLEncoder
 
-object MoviesRepository {
+class MoviesRepository(private val application: MovieTrackApp) {
 
     suspend fun discoverMoviesByPopularity(): Either<Failure, BaseResponse> {
         return try {
@@ -36,4 +41,31 @@ object MoviesRepository {
             Either.left(Failure(FailureModel("", "", "", ErrorType.SERVICE_ERROR)))
         }
     }
+
+    suspend fun checkIfMovieIsFav(movieId: Int): Either<Failure, Boolean> = withContext(Dispatchers.IO) {
+        Either.right(application.db.movieDao().findById(movieId) != null)
+    }
+
+    suspend fun removeIfFav(movie: MovieInfo) = withContext(Dispatchers.IO) {
+        val movieDb = movie.convertToDbMovie()
+        val either = checkIfMovieIsFav(movie.id)
+        if ((either as Either.Right).b) {
+            application.db.movieDao().removeMovie(movieDb)
+        } else {
+            application.db.movieDao().insertMovies(listOf(movieDb))
+        }
+    }
 }
+
+private fun MovieInfo.convertToDbMovie() = MovieFavDb(
+    id,
+    title,
+    overview,
+    popularity,
+    posterPath,
+    backdropPath ?: posterPath,
+    releaseDate,
+    originalLanguage,
+    originalTitle,
+    voteAverage
+)

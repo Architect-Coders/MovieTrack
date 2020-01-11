@@ -8,7 +8,7 @@ import com.afrasilv.movietrack.ui.home.model.MovieInfo
 import com.afrasilv.movietrack.ui.home.repository.MoviesRepository
 import kotlinx.coroutines.launch
 
-class HomeViewModel : BaseViewModel() {
+class HomeViewModel(private val moviesRepository: MoviesRepository) : BaseViewModel() {
 
     private val _model = MutableLiveData<UiModel>()
     val model: LiveData<UiModel>
@@ -23,7 +23,7 @@ class HomeViewModel : BaseViewModel() {
 
     fun discoverMovies() {
         coroutineContext.plus(launch {
-            when (val result = MoviesRepository.discoverMoviesByPopularity()) {
+            when (val result = moviesRepository.discoverMoviesByPopularity()) {
                 is Either.Left -> {
                     //Error
                 }
