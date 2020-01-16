@@ -28,7 +28,7 @@ class HomeViewModel(private val moviesRepository: MoviesRepository) : BaseViewMo
                     //Error
                 }
                 is Either.Right -> {
-                    _model.value = UiModel.Content(result.b.results)
+                    _model.value = UiModel.Content(result.b)
                 }
             }
         })

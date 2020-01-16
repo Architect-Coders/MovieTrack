@@ -28,7 +28,7 @@ class SearchViewModel(private val moviesRepository: MoviesRepository) : BaseView
                     //Error
                 }
                 is Either.Right -> {
-                    _model.value = UiModel.Content(result.b.results)
+                    _model.value = UiModel.Content(result.b)
                 }
             }
         })

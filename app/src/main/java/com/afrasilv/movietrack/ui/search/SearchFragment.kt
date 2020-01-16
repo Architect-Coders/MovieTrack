@@ -57,6 +57,13 @@ class SearchFragment : Fragment() {
         })
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (search_text_query.text.isNotEmpty()) {
+            searchViewModel.searchMovies(search_text_query.text.toString())
+        }
+    }
+
     private fun updateUI(model: SearchViewModel.UiModel) {
 
         when (model) {

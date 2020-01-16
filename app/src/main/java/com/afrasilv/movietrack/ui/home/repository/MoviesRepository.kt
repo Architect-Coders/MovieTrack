@@ -8,7 +8,6 @@ import com.afrasilv.movietrack.retrofit.RetrofitAPI
 import com.afrasilv.movietrack.ui.base.ErrorType
 import com.afrasilv.movietrack.ui.base.Failure
 import com.afrasilv.movietrack.ui.base.FailureModel
-import com.afrasilv.movietrack.ui.home.model.BaseResponse
 import com.afrasilv.movietrack.ui.home.model.MovieInfo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -16,12 +15,12 @@ import java.net.URLEncoder
 
 class MoviesRepository(private val application: MovieTrackApp) {
 
-    suspend fun discoverMoviesByPopularity(): Either<Failure, BaseResponse> {
+    suspend fun discoverMoviesByPopularity(): Either<Failure, List<MovieInfo>> {
         return try {
             val response = RetrofitAPI.service.discoverMoviesByPopularityAsync(SERVICE_API_KEY)
             if (response.isSuccessful && response.body() != null) {
                 val movieList = response.body()!!
-                Either.right(movieList)
+                Either.right(updateMovieListWithFavData(movieList.results))
             } else
                 Either.left(Failure(FailureModel("", "", "", ErrorType.SERVICE_ERROR)))
         } catch (e: Exception) {
@@ -29,7 +28,7 @@ class MoviesRepository(private val application: MovieTrackApp) {
         }
     }
 
-    suspend fun searchMoviesByName(name: String): Either<Failure, BaseResponse> {
+    suspend fun searchMoviesByName(name: String): Either<Failure, List<MovieInfo>> {
         return try {
             val response = RetrofitAPI.service.searchMovieByName(
                 SERVICE_API_KEY,
@@ -37,13 +36,23 @@ class MoviesRepository(private val application: MovieTrackApp) {
             )
             if (response.isSuccessful && response.body() != null) {
                 val searchedList = response.body()!!
-                Either.right(searchedList)
+                Either.right(updateMovieListWithFavData(searchedList.results))
             } else
                 Either.left(Failure(FailureModel("", "", "", ErrorType.SERVICE_ERROR)))
         } catch (e: Exception) {
             Either.left(Failure(FailureModel("", "", "", ErrorType.SERVICE_ERROR)))
         }
     }
+
+    private suspend fun updateMovieListWithFavData(movieList: List<MovieInfo>): List<MovieInfo> =
+        withContext(Dispatchers.IO) {
+            application.db.movieDao().getAll().forEach { movieFav ->
+                movieList.find { it.id == movieFav.id }?.apply { isFavorite = true }
+            }
+
+            movieList
+        }
+
 
     suspend fun getFavoriteMovies(): Either<Failure, List<MovieInfo>> {
         val dataList = application.db.movieDao().getAll()
@@ -93,5 +102,6 @@ private fun MovieFavDb.convertToMovieInfo() = MovieInfo(
     releaseDate = releaseDate,
     originalLanguage = originalLanguage,
     originalTitle = originalTitle,
-    voteAverage = voteAverage
+    voteAverage = voteAverage,
+    isFavorite = true
 )

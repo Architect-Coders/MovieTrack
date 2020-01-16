@@ -2,7 +2,7 @@
     <string name="app_name">MovieTrack</string>
     <string name="title_home">Home</string>
     <string name="title_search">Search</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_favorites">Favorites</string>
     <string name="title_activity_details_movie">DetailsMovieActivity</string>
 
     <string name="details_overview">Overview:</string>

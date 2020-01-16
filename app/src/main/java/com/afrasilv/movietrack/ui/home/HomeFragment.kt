@@ -42,6 +42,11 @@ class HomeFragment : Fragment() {
         homeViewModel.discoverMovies()
     }
 
+    override fun onResume() {
+        super.onResume()
+        homeViewModel.discoverMovies()
+    }
+
     private fun updateUI(model: UiModel) {
 
         when (model) {

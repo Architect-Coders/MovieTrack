@@ -13,7 +13,7 @@ import com.afrasilv.movietrack.getViewModel
 import com.afrasilv.movietrack.ui.details.DetailsMovieActivity
 import com.afrasilv.movietrack.ui.home.HomeAdapter
 import com.afrasilv.movietrack.ui.home.repository.MoviesRepository
-import kotlinx.android.synthetic.main.fragment_notifications.*
+import kotlinx.android.synthetic.main.fragment_favorites.*
 
 class FavoritesFragment : Fragment() {
 
@@ -28,7 +28,7 @@ class FavoritesFragment : Fragment() {
         favoritesViewModel = getViewModel {
             FavoritesViewModel(MoviesRepository(activity!!.applicationContext as MovieTrackApp))
         }
-        return inflater.inflate(R.layout.fragment_notifications, container, false)
+        return inflater.inflate(R.layout.fragment_favorites, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
