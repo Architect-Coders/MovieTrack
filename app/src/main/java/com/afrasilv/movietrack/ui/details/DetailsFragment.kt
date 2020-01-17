@@ -47,14 +47,20 @@ class DetailsFragment : Fragment() {
 
         fab.show()
 
-        mDetailsViewModel.model.observe(this, Observer {
-            when(it) {
-                is DetailsViewModel.UiModel.IsFav -> if (it.isFav) fab.setImageDrawable(
-                    ContextCompat.getDrawable(context!!, R.drawable.ic_favorite_black_24dp)) else fab.setImageDrawable(
-                    ContextCompat.getDrawable(context!!, R.drawable.ic_favorite_border_black_24dp))
-                is DetailsViewModel.UiModel.ShowCast -> loadCastData(it.castList)
-                is DetailsViewModel.UiModel.Navigation -> {
-                    (activity as DetailsMovieActivity).navigateToCast(it.cast)
+        mDetailsViewModel.model.observe(viewLifecycleOwner, Observer {
+            it.getContentIfNotHandled()?.let { content ->
+                when (content) {
+                    is DetailsViewModel.UiModel.IsFav -> if (content.isFav) fab.setImageDrawable(
+                        ContextCompat.getDrawable(context!!, R.drawable.ic_favorite_black_24dp)
+                    ) else fab.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            context!!,
+                            R.drawable.ic_favorite_border_black_24dp
+                        )
+                    )
+                    is DetailsViewModel.UiModel.ShowCast -> loadCastData(content.castList)
+                    is DetailsViewModel.UiModel.Navigation ->
+                        (activity as DetailsMovieActivity).navigateToCast(content.cast)
                 }
             }
         })

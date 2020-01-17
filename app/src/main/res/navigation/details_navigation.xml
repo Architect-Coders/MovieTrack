@@ -22,10 +22,13 @@
         android:id="@+id/castDetailsFragment"
         android:name="com.afrasilv.movietrack.ui.castdetails.CastDetailsFragment"
         android:label="fragment_cast_details"
-        tools:layout="@layout/fragment_cast_details">
+        tools:layout="@layout/fragment_details_movie">
         <argument
             android:name="selectedItem"
             app:argType="com.afrasilv.movietrack.ui.details.model.Cast" />
+        <action
+            android:id="@+id/action_castDetailsFragment_to_navigation_details"
+            app:destination="@id/navigation_details" />
     </fragment>
 
 </navigation>

@@ -34,14 +34,13 @@ class DetailsMovieActivity : AppCompatActivity() {
         navController.setGraph(R.navigation.details_navigation, bundle)
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-
-        findNavController(R.id.nav_host_fragment).navigateUp()
-    }
-
     fun navigateToCast(cast: Cast) {
         val bundle = bundleOf(CAST_SELECTED to cast)
-        findNavController(R.id.nav_host_fragment).navigate(R.id.castDetailsFragment, bundle)
+        findNavController(R.id.nav_host_fragment).navigate(R.id.action_navigation_details_to_castDetailsFragment, bundle)
+    }
+
+    fun navigateToMovie(movie: MovieInfo) {
+        val bundle = bundleOf(SELECTED_ITEM to movie)
+        findNavController(R.id.nav_host_fragment).navigate(R.id.action_castDetailsFragment_to_navigation_details, bundle)
     }
 }

@@ -10,6 +10,7 @@ import com.afrasilv.movietrack.MovieTrackApp
 import com.afrasilv.movietrack.R
 import com.afrasilv.movietrack.getViewModel
 import com.afrasilv.movietrack.loadUrl
+import com.afrasilv.movietrack.ui.details.DetailsMovieActivity
 import com.afrasilv.movietrack.ui.details.model.Cast
 import com.afrasilv.movietrack.ui.home.HomeAdapter
 import com.afrasilv.movietrack.ui.home.model.MovieInfo
@@ -45,8 +46,12 @@ class CastDetailsFragment : Fragment() {
         fab.hide()
 
         mCastViewModel.model.observe(this, Observer {
-            when (it) {
-                is CastViewModel.UiModel.ShowMovies -> loadCastData(it.movieList)
+            it.getContentIfNotHandled()?.run {
+                when (this) {
+                    is CastViewModel.UiModel.ShowMovies -> loadCastData(movieList)
+                    is CastViewModel.UiModel.Navigation ->
+                        (activity as DetailsMovieActivity).navigateToMovie(movie)
+                }
             }
         })
 
