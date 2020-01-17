@@ -10,6 +10,8 @@ import com.afrasilv.movietrack.MovieTrackApp
 import com.afrasilv.movietrack.R
 import com.afrasilv.movietrack.getViewModel
 import com.afrasilv.movietrack.loadUrl
+import com.afrasilv.movietrack.ui.details.adapter.CastAdapter
+import com.afrasilv.movietrack.ui.details.model.Cast
 import com.afrasilv.movietrack.ui.home.model.MovieInfo
 import com.afrasilv.movietrack.ui.home.repository.MoviesRepository
 import com.google.android.material.snackbar.Snackbar
@@ -18,6 +20,7 @@ import kotlinx.android.synthetic.main.activity_details_movie.*
 class DetailsMovieActivity : AppCompatActivity() {
 
     private lateinit var detailsViewModel: DetailsViewModel
+    private lateinit var adapter: CastAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +33,7 @@ class DetailsMovieActivity : AppCompatActivity() {
         detailsViewModel.model.observe(this, Observer {
             when(it) {
                 is DetailsViewModel.UiModel.IsFav -> if (it.isFav) fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_favorite_black_24dp)) else fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_favorite_border_black_24dp))
+                is DetailsViewModel.UiModel.ShowCast -> loadCastData(it.castList)
             }
         })
 
@@ -40,6 +44,7 @@ class DetailsMovieActivity : AppCompatActivity() {
         }
 
         with(intent.extras!!["selectedItem"] as MovieInfo) {
+            detailsViewModel.getCredits(id)
             detailsViewModel.checkIsFav(id)
 
             detailsTitleToolbar.title = title
@@ -70,6 +75,11 @@ class DetailsMovieActivity : AppCompatActivity() {
                 detailsViewModel.removeIfFav(this)
             }
         }
+    }
+
+    private fun loadCastData(castList: List<Cast>) {
+        adapter = CastAdapter(castList)
+        cast_list.adapter = adapter
     }
 
 }

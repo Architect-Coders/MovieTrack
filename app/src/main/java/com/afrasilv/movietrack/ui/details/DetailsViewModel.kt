@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import arrow.core.Either
 import com.afrasilv.movietrack.ui.base.BaseViewModel
+import com.afrasilv.movietrack.ui.details.model.Cast
+import com.afrasilv.movietrack.ui.details.repository.CreditsRepository
 import com.afrasilv.movietrack.ui.home.model.MovieInfo
 import com.afrasilv.movietrack.ui.home.repository.MoviesRepository
 import kotlinx.coroutines.launch
@@ -17,6 +19,7 @@ class DetailsViewModel(private val moviesRepository: MoviesRepository) : BaseVie
     sealed class UiModel {
         object Loading : UiModel()
         class IsFav(val isFav: Boolean) : UiModel()
+        class ShowCast(val castList: List<Cast>) : UiModel()
     }
 
     fun checkIsFav(idMovie: Int) {
@@ -33,6 +36,14 @@ class DetailsViewModel(private val moviesRepository: MoviesRepository) : BaseVie
         launch {
             moviesRepository.removeIfFav(movie)
             checkIsFav(movie.id)
+        }
+    }
+
+    fun getCredits(movieId: Int) {
+        launch {
+            when (val response = CreditsRepository.discoverMoviesByPopularity(movieId)) {
+                is Either.Right -> _model.postValue(UiModel.ShowCast(response.b))
+            }
         }
     }
 }

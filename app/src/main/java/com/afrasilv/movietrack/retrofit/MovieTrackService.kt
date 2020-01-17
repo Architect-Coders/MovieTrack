@@ -1,8 +1,10 @@
 package com.afrasilv.movietrack.retrofit
 
+import com.afrasilv.movietrack.ui.details.model.CreditsResponse
 import com.afrasilv.movietrack.ui.home.model.BaseResponse
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface MovieTrackService {
@@ -17,4 +19,10 @@ interface MovieTrackService {
         @Query("api_key") apiKey: String,
         @Query("query") name: String
     ): Response<BaseResponse>
+
+    @GET("movie/{movie_id}/credits")
+    suspend fun getMovieCredits(
+        @Path("movie_id") movieId: Int,
+        @Query("api_key") apiKey: String
+    ): Response<CreditsResponse>
 }
