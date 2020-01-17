@@ -1,12 +1,15 @@
 package com.afrasilv.movietrack.ui.details.model
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
 data class CreditsResponse(
     val id: Int,
     val cast: List<Cast>
 )
 
+@Parcelize
 data class Cast(
     @SerializedName("cast_id")
     val cast_id: Int,
@@ -19,4 +22,4 @@ data class Cast(
     val order: Int,
     @SerializedName("profile_path")
     val profilePath: String
-)
+) : Parcelable

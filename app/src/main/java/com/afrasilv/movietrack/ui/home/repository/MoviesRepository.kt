@@ -77,6 +77,22 @@ class MoviesRepository(private val application: MovieTrackApp) {
             application.db.movieDao().insertMovies(listOf(movieDb))
         }
     }
+
+    suspend fun searchPerson(personId: Int): Either<Failure, List<MovieInfo>> {
+        return try {
+            val response = RetrofitAPI.service.getMoviesFromPersonId(
+                personId,
+                SERVICE_API_KEY
+            )
+            if (response.isSuccessful && response.body() != null) {
+                val searchedList = response.body()!!
+                Either.right(updateMovieListWithFavData(searchedList.cast))
+            } else
+                Either.left(Failure(FailureModel("", "", "", ErrorType.SERVICE_ERROR)))
+        } catch (e: Exception) {
+            Either.left(Failure(FailureModel("", "", "", ErrorType.SERVICE_ERROR)))
+        }
+    }
 }
 
 private fun MovieInfo.convertToDbMovie() = MovieFavDb(

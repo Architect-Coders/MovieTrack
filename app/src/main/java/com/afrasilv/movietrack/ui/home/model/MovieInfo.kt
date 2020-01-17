@@ -20,5 +20,6 @@ data class MovieInfo(
     @SerializedName("vote_average") val voteAverage: Double,
     val overview: String,
     @SerializedName("release_date") val releaseDate: String,
-    var isFavorite: Boolean
+    var isFavorite: Boolean,
+    var character: String? = null
 ) : Parcelable

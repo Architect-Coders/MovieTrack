@@ -6,6 +6,7 @@ import arrow.core.Either
 import com.afrasilv.movietrack.ui.base.BaseViewModel
 import com.afrasilv.movietrack.ui.details.model.Cast
 import com.afrasilv.movietrack.ui.details.repository.CreditsRepository
+import com.afrasilv.movietrack.ui.home.HomeViewModel
 import com.afrasilv.movietrack.ui.home.model.MovieInfo
 import com.afrasilv.movietrack.ui.home.repository.MoviesRepository
 import kotlinx.coroutines.launch
@@ -20,6 +21,7 @@ class DetailsViewModel(private val moviesRepository: MoviesRepository) : BaseVie
         object Loading : UiModel()
         class IsFav(val isFav: Boolean) : UiModel()
         class ShowCast(val castList: List<Cast>) : UiModel()
+        class Navigation(val cast: Cast): UiModel()
     }
 
     fun checkIsFav(idMovie: Int) {
@@ -45,5 +47,9 @@ class DetailsViewModel(private val moviesRepository: MoviesRepository) : BaseVie
                 is Either.Right -> _model.postValue(UiModel.ShowCast(response.b))
             }
         }
+    }
+
+    fun movieClicked(cast: Cast) {
+        _model.value = UiModel.Navigation(cast)
     }
 }

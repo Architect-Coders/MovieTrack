@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_details">
+
+    <fragment
+        android:id="@+id/navigation_details"
+        android:name="com.afrasilv.movietrack.ui.details.DetailsFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_details_movie" >
+        <argument
+            android:name="selectedItem"
+            app:argType="com.afrasilv.movietrack.ui.home.model.MovieInfo" />
+        <action
+            android:id="@+id/action_navigation_details_to_castDetailsFragment"
+            app:destination="@id/castDetailsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/castDetailsFragment"
+        android:name="com.afrasilv.movietrack.ui.castdetails.CastDetailsFragment"
+        android:label="fragment_cast_details"
+        tools:layout="@layout/fragment_cast_details">
+        <argument
+            android:name="selectedItem"
+            app:argType="com.afrasilv.movietrack.ui.details.model.Cast" />
+    </fragment>
+
+</navigation>

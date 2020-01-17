@@ -3,83 +3,45 @@ package com.afrasilv.movietrack.ui.details
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
 import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
 import com.afrasilv.movietrack.MovieTrackApp
 import com.afrasilv.movietrack.R
 import com.afrasilv.movietrack.getViewModel
 import com.afrasilv.movietrack.loadUrl
+import com.afrasilv.movietrack.ui.castdetails.CastDetailsFragment
+import com.afrasilv.movietrack.ui.castdetails.CastDetailsFragment.Companion.CAST_SELECTED
+import com.afrasilv.movietrack.ui.details.DetailsFragment.Companion.SELECTED_ITEM
 import com.afrasilv.movietrack.ui.details.adapter.CastAdapter
 import com.afrasilv.movietrack.ui.details.model.Cast
 import com.afrasilv.movietrack.ui.home.model.MovieInfo
 import com.afrasilv.movietrack.ui.home.repository.MoviesRepository
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_details_movie.*
+import kotlinx.android.synthetic.main.fragment_details_movie.*
 
 class DetailsMovieActivity : AppCompatActivity() {
 
-    private lateinit var detailsViewModel: DetailsViewModel
-    private lateinit var adapter: CastAdapter
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_details_movie)
+        setContentView(R.layout.activity_details)
 
-        detailsViewModel = getViewModel {
-            DetailsViewModel(MoviesRepository(applicationContext as MovieTrackApp))
-        }
+        val navController = findNavController(R.id.nav_host_fragment)
 
-        detailsViewModel.model.observe(this, Observer {
-            when(it) {
-                is DetailsViewModel.UiModel.IsFav -> if (it.isFav) fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_favorite_black_24dp)) else fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_favorite_border_black_24dp))
-                is DetailsViewModel.UiModel.ShowCast -> loadCastData(it.castList)
-            }
-        })
-
-
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
-
-        with(intent.extras!!["selectedItem"] as MovieInfo) {
-            detailsViewModel.getCredits(id)
-            detailsViewModel.checkIsFav(id)
-
-            detailsTitleToolbar.title = title
-            val background = backdropPath ?: posterPath
-            detailsImageToolbar.loadUrl("https://image.tmdb.org/t/p/w780$background")
-
-            detailsOverview.text = overview
-
-            detailsInfoData.text = buildSpannedString {
-
-                bold { append(getString(R.string.details_original_lang)) }
-                appendln(" $originalLanguage")
-
-                bold { append(getString(R.string.details_original_title)) }
-                appendln(" $originalTitle")
-
-                bold { append(getString(R.string.details_release)) }
-                appendln(" $releaseDate")
-
-                bold { append(getString(R.string.details_popularity)) }
-                appendln(" $popularity")
-
-                bold { append(getString(R.string.details_vote_average)) }
-                append(" $voteAverage")
-            }
-
-            fab.setOnClickListener {
-                detailsViewModel.removeIfFav(this)
-            }
-        }
+        val bundle = bundleOf(SELECTED_ITEM to intent.extras!!["selectedItem"])
+        navController.setGraph(R.navigation.details_navigation, bundle)
     }
 
-    private fun loadCastData(castList: List<Cast>) {
-        adapter = CastAdapter(castList)
-        cast_list.adapter = adapter
+    override fun onBackPressed() {
+        super.onBackPressed()
+
+        findNavController(R.id.nav_host_fragment).navigateUp()
     }
 
+    fun navigateToCast(cast: Cast) {
+        val bundle = bundleOf(CAST_SELECTED to cast)
+        findNavController(R.id.nav_host_fragment).navigate(R.id.castDetailsFragment, bundle)
+    }
 }
