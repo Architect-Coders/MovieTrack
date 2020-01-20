@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import arrow.core.Either
 import com.afrasilv.movietrack.Event
 import com.afrasilv.movietrack.ui.base.BaseViewModel
+import com.afrasilv.movietrack.ui.castdetails.model.Person
 import com.afrasilv.movietrack.ui.castdetails.repository.CastRepository
 import com.afrasilv.movietrack.ui.home.model.MovieInfo
 import com.afrasilv.movietrack.ui.home.repository.MoviesRepository
@@ -21,15 +22,28 @@ class CastViewModel(private val moviesRepository: MoviesRepository) : BaseViewMo
         object Loading : UiModel()
         class ShowMovies(val movieList: List<MovieInfo>) : UiModel()
         class Navigation(val movie: MovieInfo) : UiModel()
+        class PersonData(val person: Person) : UiModel()
     }
 
     fun getMoviesByCastId(name: String) {
         launch(Dispatchers.IO) {
             when (val response = CastRepository.searchPerson(name)) {
-                is Either.Right -> getCastMovieDataById(response.b)
+                is Either.Right -> {
+                    getPersonDataByPersonId(response.b)
+                    getCastMovieDataById(response.b)
+                }
             }
         }
     }
+
+    private fun getPersonDataByPersonId(personId: Int) {
+        launch(Dispatchers.IO) {
+            when (val response = CastRepository.getPersonDataById(personId)) {
+                is Either.Right -> _model.postValue(Event(UiModel.PersonData(response.b)))
+            }
+        }
+    }
+
 
     private fun getCastMovieDataById(personId: Int) {
         launch(Dispatchers.IO) {

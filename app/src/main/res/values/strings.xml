@@ -13,6 +13,12 @@
     <string name="details_original_title">Original Title:</string>
     <string name="details_original_lang">Original Language:</string>
 
+    <string name="cast_birthday">Birthday:</string>
+    <string name="cast_deathday">Deathday:</string>
+    <string name="cast_biography">Biography:</string>
+    <string name="cast_placeOfBirth">Place of birth:</string>
+    <string name="cast_popularity">Popularity:</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

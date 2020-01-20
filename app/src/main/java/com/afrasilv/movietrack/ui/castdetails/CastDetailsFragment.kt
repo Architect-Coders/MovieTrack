@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.text.bold
+import androidx.core.text.buildSpannedString
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
@@ -11,6 +13,7 @@ import com.afrasilv.movietrack.MovieTrackApp
 import com.afrasilv.movietrack.R
 import com.afrasilv.movietrack.getViewModel
 import com.afrasilv.movietrack.loadUrl
+import com.afrasilv.movietrack.ui.castdetails.model.Person
 import com.afrasilv.movietrack.ui.details.DetailsMovieActivity
 import com.afrasilv.movietrack.ui.home.HomeAdapter
 import com.afrasilv.movietrack.ui.home.model.MovieInfo
@@ -48,6 +51,7 @@ class CastDetailsFragment : Fragment() {
                     is CastViewModel.UiModel.ShowMovies -> showFilmography(movieList)
                     is CastViewModel.UiModel.Navigation ->
                         (activity as DetailsMovieActivity).navigateToMovie(movie)
+                    is CastViewModel.UiModel.PersonData -> showPersonData(person)
                 }
             }
         })
@@ -58,8 +62,34 @@ class CastDetailsFragment : Fragment() {
             detailsTitleToolbar.title = name
             val background = profilePath
             detailsImageToolbar.loadUrl("https://image.tmdb.org/t/p/w780$background")
+        }
+    }
 
-            detailsOverview.text = "Other Films"
+    private fun showPersonData(person: Person) {
+        with(person) {
+            detailsOverview.text = buildSpannedString {
+
+                bold { append(getString(R.string.cast_birthday)) }
+                appendln(" $birthday")
+
+                bold { append(getString(R.string.cast_deathday)) }
+                appendln(
+                    if (!deathday.isNullOrEmpty()) {
+                        " $deathday"
+                    } else {
+                        " still alive"
+                    }
+                )
+
+                bold { append(getString(R.string.cast_biography)) }
+                appendln(" $biography")
+
+                bold { append(getString(R.string.cast_placeOfBirth)) }
+                appendln(" $placeOfBirth")
+
+                bold { append(getString(R.string.cast_popularity)) }
+                append(" $popularity")
+            }
         }
     }
 

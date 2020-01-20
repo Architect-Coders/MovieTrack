@@ -2,6 +2,7 @@ package com.afrasilv.movietrack.retrofit
 
 import com.afrasilv.movietrack.ui.castdetails.model.CastMovie
 import com.afrasilv.movietrack.ui.castdetails.model.CastSearchBase
+import com.afrasilv.movietrack.ui.castdetails.model.Person
 import com.afrasilv.movietrack.ui.details.model.CreditsResponse
 import com.afrasilv.movietrack.ui.home.model.BaseResponse
 import retrofit2.Response
@@ -33,6 +34,12 @@ interface MovieTrackService {
         @Query("api_key") apiKey: String,
         @Query("query") name: String
     ): Response<CastSearchBase>
+
+    @GET("person/{person_id}")
+    suspend fun getPersonData(
+        @Path("person_id") personId: Int,
+        @Query("api_key") apiKey: String
+    ): Response<Person>
 
     @GET("person/{person_id}/movie_credits")
     suspend fun getMoviesFromPersonId(
