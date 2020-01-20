@@ -9,26 +9,23 @@ import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.navArgs
 import com.afrasilv.movietrack.MovieTrackApp
 import com.afrasilv.movietrack.R
 import com.afrasilv.movietrack.getViewModel
 import com.afrasilv.movietrack.loadUrl
 import com.afrasilv.movietrack.ui.details.adapter.CastAdapter
 import com.afrasilv.movietrack.ui.details.model.Cast
-import com.afrasilv.movietrack.ui.home.model.MovieInfo
 import com.afrasilv.movietrack.ui.home.repository.MoviesRepository
 import kotlinx.android.synthetic.main.fragment_details_movie.*
 
 class DetailsFragment : Fragment() {
-    private lateinit var selectedItem: MovieInfo
     private lateinit var mDetailsViewModel: DetailsViewModel
     private lateinit var adapter: CastAdapter
+    private val args: DetailsFragmentArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            selectedItem = it.getParcelable(SELECTED_ITEM)!!
-        }
         mDetailsViewModel = getViewModel {
             DetailsViewModel(MoviesRepository(activity!!.applicationContext as MovieTrackApp))
         }
@@ -65,7 +62,7 @@ class DetailsFragment : Fragment() {
             }
         })
 
-        with(selectedItem) {
+        with(args.selectedItem) {
             mDetailsViewModel.getCredits(id)
             mDetailsViewModel.checkIsFav(id)
 

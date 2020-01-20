@@ -29,8 +29,11 @@ class CastAdapter(private val castList: List<Cast>, private val clickListener: (
         fun bind(cast: Cast) {
             itemView.cast_name.text = cast.name
             itemView.cast_character.text = "as ${cast.character}"
-            Glide.with(itemView.context).load("https://image.tmdb.org/t/p/w185/${cast.profilePath}")
-                .into(itemView.cast_image)
+            if (!cast.profilePath.isNullOrEmpty()) {
+                Glide.with(itemView.context)
+                    .load("https://image.tmdb.org/t/p/w185/${cast.profilePath}")
+                    .into(itemView.cast_image)
+            }
         }
     }
 }

@@ -6,27 +6,24 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.navArgs
 import com.afrasilv.movietrack.MovieTrackApp
 import com.afrasilv.movietrack.R
 import com.afrasilv.movietrack.getViewModel
 import com.afrasilv.movietrack.loadUrl
 import com.afrasilv.movietrack.ui.details.DetailsMovieActivity
-import com.afrasilv.movietrack.ui.details.model.Cast
 import com.afrasilv.movietrack.ui.home.HomeAdapter
 import com.afrasilv.movietrack.ui.home.model.MovieInfo
 import com.afrasilv.movietrack.ui.home.repository.MoviesRepository
 import kotlinx.android.synthetic.main.fragment_details_movie.*
 
 class CastDetailsFragment : Fragment() {
-    private lateinit var selectedItem: Cast
     private lateinit var mCastViewModel: CastViewModel
     private lateinit var adapter: HomeAdapter
+    private val args: CastDetailsFragmentArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            selectedItem = it.getParcelable(CAST_SELECTED)!!
-        }
         mCastViewModel = getViewModel {
             CastViewModel(MoviesRepository(activity!!.applicationContext as MovieTrackApp))
         }
@@ -48,15 +45,15 @@ class CastDetailsFragment : Fragment() {
         mCastViewModel.model.observe(this, Observer {
             it.getContentIfNotHandled()?.run {
                 when (this) {
-                    is CastViewModel.UiModel.ShowMovies -> loadCastData(movieList)
+                    is CastViewModel.UiModel.ShowMovies -> showFilmography(movieList)
                     is CastViewModel.UiModel.Navigation ->
                         (activity as DetailsMovieActivity).navigateToMovie(movie)
                 }
             }
         })
 
-        with(selectedItem) {
-            mCastViewModel.getMoviesByCastId(selectedItem.name)
+        with(args.selectedItem) {
+            mCastViewModel.getMoviesByCastId(name)
 
             detailsTitleToolbar.title = name
             val background = profilePath
@@ -66,13 +63,9 @@ class CastDetailsFragment : Fragment() {
         }
     }
 
-    private fun loadCastData(castList: List<MovieInfo>) {
+    private fun showFilmography(castList: List<MovieInfo>) {
         adapter = HomeAdapter(mCastViewModel::movieClicked)
         adapter.updateData(castList)
         cast_list.adapter = adapter
-    }
-
-    companion object {
-        const val CAST_SELECTED = "castSelected"
     }
 }

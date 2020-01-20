@@ -7,12 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import com.afrasilv.movietrack.MovieTrackApp
 import com.afrasilv.movietrack.R
 import com.afrasilv.movietrack.getViewModel
 import com.afrasilv.movietrack.ui.details.DetailsMovieActivity
-import com.afrasilv.movietrack.ui.details.DetailsViewModel
 import com.afrasilv.movietrack.ui.home.HomeViewModel.UiModel
 import com.afrasilv.movietrack.ui.home.repository.MoviesRepository
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -39,7 +37,6 @@ class HomeFragment : Fragment() {
         adapter = HomeAdapter(homeViewModel::movieClicked)
         home_list.adapter = adapter
         homeViewModel.model.observe(viewLifecycleOwner, Observer(::updateUI))
-        homeViewModel.discoverMovies()
     }
 
     override fun onResume() {

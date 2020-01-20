@@ -35,6 +35,15 @@ class HomeAdapter(private val clickListener: (MovieInfo) -> Unit) : RecyclerView
             itemView.movie_title.text = movie.title
             Glide.with(itemView.context).load("https://image.tmdb.org/t/p/w185/${movie.posterPath}").into(itemView.movie_image)
             itemView.movie_fav.visibility = if (movie.isFavorite) View.VISIBLE else View.GONE
+            with(itemView.movie_character) {
+                if (!movie.character.isNullOrEmpty()) {
+                    visibility = View.VISIBLE
+                    text = "as ${movie.character}"
+                } else {
+                    visibility = View.GONE
+                }
+            }
+
         }
     }
 }
