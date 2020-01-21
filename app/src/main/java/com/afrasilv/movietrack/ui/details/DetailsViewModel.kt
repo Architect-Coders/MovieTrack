@@ -7,7 +7,6 @@ import com.afrasilv.movietrack.Event
 import com.afrasilv.movietrack.ui.base.BaseViewModel
 import com.afrasilv.movietrack.ui.details.model.Cast
 import com.afrasilv.movietrack.ui.details.repository.CreditsRepository
-import com.afrasilv.movietrack.ui.home.HomeViewModel
 import com.afrasilv.movietrack.ui.home.model.MovieInfo
 import com.afrasilv.movietrack.ui.home.repository.MoviesRepository
 import kotlinx.coroutines.Dispatchers
