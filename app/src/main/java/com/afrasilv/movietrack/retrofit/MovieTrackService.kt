@@ -14,7 +14,8 @@ interface MovieTrackService {
 
     @GET("discover/movie?sort_by=popularity.desc")
     suspend fun discoverMoviesByPopularityAsync(
-        @Query("api_key") apiKey: String
+        @Query("api_key") apiKey: String,
+        @Query("region") region: String
     ): Response<BaseResponse>
 
     @GET("search/movie")

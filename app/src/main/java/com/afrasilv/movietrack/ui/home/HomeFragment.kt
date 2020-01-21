@@ -13,6 +13,7 @@ import com.afrasilv.movietrack.getViewModel
 import com.afrasilv.movietrack.ui.details.DetailsMovieActivity
 import com.afrasilv.movietrack.ui.home.HomeViewModel.UiModel
 import com.afrasilv.movietrack.ui.home.repository.MoviesRepository
+import com.afrasilv.movietrack.ui.location.LocationRepository
 import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : Fragment() {
@@ -26,8 +27,12 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         homeViewModel = getViewModel {
-            HomeViewModel(MoviesRepository(activity!!.applicationContext as MovieTrackApp))
+            HomeViewModel(
+                MoviesRepository(activity!!.applicationContext as MovieTrackApp),
+                LocationRepository(activity!!)
+            )
         }
+
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
@@ -47,13 +52,17 @@ class HomeFragment : Fragment() {
     private fun updateUI(model: UiModel) {
 
         when (model) {
-            is UiModel.Content -> adapter.updateData(model.movies)
+            is UiModel.Content -> {
+                home_progress_bar.visibility = View.GONE
+                adapter.updateData(model.movies)
+            }
             is UiModel.Navigation -> {
                 Intent(context, DetailsMovieActivity::class.java).apply {
                     putExtra("selectedItem", model.movie)
                     startActivity(this)
                 }
             }
+            is UiModel.Loading -> home_progress_bar.visibility = View.VISIBLE
         }
     }
 }

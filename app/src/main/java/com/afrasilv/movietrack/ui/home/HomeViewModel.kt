@@ -6,9 +6,10 @@ import arrow.core.Either
 import com.afrasilv.movietrack.ui.base.BaseViewModel
 import com.afrasilv.movietrack.ui.home.model.MovieInfo
 import com.afrasilv.movietrack.ui.home.repository.MoviesRepository
+import com.afrasilv.movietrack.ui.location.LocationRepository
 import kotlinx.coroutines.launch
 
-class HomeViewModel(private val moviesRepository: MoviesRepository) : BaseViewModel() {
+class HomeViewModel(private val moviesRepository: MoviesRepository, private val locationRepository: LocationRepository) : BaseViewModel() {
 
     private val _model = MutableLiveData<UiModel>()
     val model: LiveData<UiModel>
@@ -18,12 +19,13 @@ class HomeViewModel(private val moviesRepository: MoviesRepository) : BaseViewMo
         object Loading : UiModel()
         data class Content(val movies: List<MovieInfo>) : UiModel()
         data class Navigation(val movie: MovieInfo) : UiModel()
-        object RequestLocationPermission : UiModel()
     }
 
     fun discoverMovies() {
         coroutineContext.plus(launch {
-            when (val result = moviesRepository.discoverMoviesByPopularity()) {
+            _model.value = UiModel.Loading
+            val region = locationRepository.findLastRegion()
+            when (val result = moviesRepository.discoverMoviesByPopularity(region)) {
                 is Either.Left -> {
                     //Error
                 }

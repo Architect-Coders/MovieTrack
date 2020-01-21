@@ -15,9 +15,9 @@ import java.net.URLEncoder
 
 class MoviesRepository(private val application: MovieTrackApp) {
 
-    suspend fun discoverMoviesByPopularity(): Either<Failure, List<MovieInfo>> {
+    suspend fun discoverMoviesByPopularity(region: String): Either<Failure, List<MovieInfo>> {
         return try {
-            val response = RetrofitAPI.service.discoverMoviesByPopularityAsync(SERVICE_API_KEY)
+            val response = RetrofitAPI.service.discoverMoviesByPopularityAsync(SERVICE_API_KEY, region)
             if (response.isSuccessful && response.body() != null) {
                 val movieList = response.body()!!
                 Either.right(updateMovieListWithFavData(movieList.results))
