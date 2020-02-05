@@ -2,7 +2,7 @@ package com.afrasilv.movietrack
 
 import android.app.Application
 import androidx.room.Room
-import com.afrasilv.movietrack.model.database.MovieFavDatabase
+import com.afrasilv.movietrack.data.database.MovieFavDatabase
 
 class MovieTrackApp : Application() {
 

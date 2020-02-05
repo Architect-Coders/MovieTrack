@@ -4,15 +4,22 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import arrow.core.Either
 import com.afrasilv.movietrack.Event
+import com.afrasilv.movietrack.data.convertToMovie
 import com.afrasilv.movietrack.ui.base.BaseViewModel
+import com.afrasilv.movietrack.ui.base.convertToCast
 import com.afrasilv.movietrack.ui.details.model.Cast
-import com.afrasilv.movietrack.ui.details.repository.CreditsRepository
-import com.afrasilv.movietrack.ui.home.model.MovieInfo
-import com.afrasilv.movietrack.ui.home.repository.MoviesRepository
+import com.afrasilv.movietrack.ui.model.MovieInfo
+import com.afrasilv.usecases.CheckIfMovieIsFav
+import com.afrasilv.usecases.GetMovieCredits
+import com.afrasilv.usecases.RemoveIfFav
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class DetailsViewModel(private val moviesRepository: MoviesRepository) : BaseViewModel() {
+class DetailsViewModel(
+    private val checkIfMovieIsFav: CheckIfMovieIsFav,
+    private val removeIfFav: RemoveIfFav,
+    private val getMovieCredits: GetMovieCredits
+) : BaseViewModel() {
 
     private val _model = MutableLiveData<Event<UiModel>>()
     val model: LiveData<Event<UiModel>>
@@ -22,30 +29,30 @@ class DetailsViewModel(private val moviesRepository: MoviesRepository) : BaseVie
         object Loading : UiModel()
         class IsFav(val isFav: Boolean) : UiModel()
         class ShowCast(val castList: List<Cast>) : UiModel()
-        class Navigation(val cast: Cast): UiModel()
+        class Navigation(val cast: Cast) : UiModel()
     }
 
     fun checkIsFav(idMovie: Int) {
-        launch(Dispatchers.IO) {
-            if ((moviesRepository.checkIfMovieIsFav(idMovie) as Either.Right).b) {
-                _model.postValue(Event(UiModel.IsFav(true)))
+        launch {
+            if (checkIfMovieIsFav.invoke(idMovie)) {
+                _model.value = Event(UiModel.IsFav(true))
             } else {
-                _model.postValue(Event(UiModel.IsFav(false)))
+                _model.value = Event(UiModel.IsFav(false))
             }
         }
     }
 
     fun removeIfFav(movie: MovieInfo) {
         launch {
-            moviesRepository.removeIfFav(movie)
+            removeIfFav.invoke(movie.convertToMovie())
             checkIsFav(movie.id)
         }
     }
 
     fun getCredits(movieId: Int) {
-        launch(Dispatchers.IO) {
-            when (val response = CreditsRepository.discoverMoviesByPopularity(movieId)) {
-                is Either.Right -> _model.postValue(Event(UiModel.ShowCast(response.b)))
+        launch {
+            when (val response = getMovieCredits.invoke(movieId)) {
+                is Either.Right -> _model.value = Event(UiModel.ShowCast(response.b.map { it.convertToCast() }))
             }
         }
     }

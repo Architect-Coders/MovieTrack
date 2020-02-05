@@ -9,15 +9,22 @@ import androidx.core.text.buildSpannedString
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
-import com.afrasilv.movietrack.MovieTrackApp
-import com.afrasilv.movietrack.R
-import com.afrasilv.movietrack.getViewModel
-import com.afrasilv.movietrack.loadUrl
-import com.afrasilv.movietrack.ui.castdetails.model.Person
+import com.afrasilv.data.repository.CastRepository
+import com.afrasilv.data.repository.LocationRepository
+import com.afrasilv.data.repository.MoviesRepository
+import com.afrasilv.domain.Person
+import com.afrasilv.movietrack.*
+import com.afrasilv.movietrack.data.AndroidPermissionChecker
+import com.afrasilv.movietrack.data.database.RoomDataSource
+import com.afrasilv.movietrack.data.retrofit.MovieTrackRemoteDataSource
+import com.afrasilv.movietrack.data.retrofit.RetrofitAPI
 import com.afrasilv.movietrack.ui.details.DetailsMovieActivity
 import com.afrasilv.movietrack.ui.home.HomeAdapter
-import com.afrasilv.movietrack.ui.home.model.MovieInfo
-import com.afrasilv.movietrack.ui.home.repository.MoviesRepository
+import com.afrasilv.movietrack.ui.location.PlayServicesLocationDataSource
+import com.afrasilv.movietrack.ui.model.MovieInfo
+import com.afrasilv.usecases.GetMoviesFromPersonId
+import com.afrasilv.usecases.GetPersonDataById
+import com.afrasilv.usecases.SearchPerson
 import kotlinx.android.synthetic.main.fragment_details_movie.*
 
 class CastDetailsFragment : Fragment() {
@@ -28,7 +35,38 @@ class CastDetailsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mCastViewModel = getViewModel {
-            CastViewModel(MoviesRepository(activity!!.applicationContext as MovieTrackApp))
+            val app = activity!!.application as MovieTrackApp
+            CastViewModel(
+                SearchPerson(
+                    CastRepository(
+                        MovieTrackRemoteDataSource(
+                            RetrofitAPI()
+                        ),
+                        SERVICE_API_KEY
+                    )
+                ),
+                GetPersonDataById(
+                    CastRepository(
+                        MovieTrackRemoteDataSource(
+                            RetrofitAPI()
+                        ),
+                        SERVICE_API_KEY
+                    )
+                ),
+                GetMoviesFromPersonId(
+                    MoviesRepository(
+                        RoomDataSource(app.db),
+                        MovieTrackRemoteDataSource(
+                            RetrofitAPI()
+                        ),
+                        LocationRepository(
+                            PlayServicesLocationDataSource(app),
+                            AndroidPermissionChecker(app)
+                        ),
+                        SERVICE_API_KEY
+                    )
+                )
+            )
         }
     }
 

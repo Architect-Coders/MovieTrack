@@ -8,7 +8,7 @@ import com.afrasilv.movietrack.R
 import com.afrasilv.movietrack.ui.castdetails.CastDetailsFragmentDirections
 import com.afrasilv.movietrack.ui.details.DetailsFragment.Companion.SELECTED_ITEM
 import com.afrasilv.movietrack.ui.details.model.Cast
-import com.afrasilv.movietrack.ui.home.model.MovieInfo
+import com.afrasilv.movietrack.ui.model.MovieInfo
 
 class DetailsMovieActivity : AppCompatActivity() {
 

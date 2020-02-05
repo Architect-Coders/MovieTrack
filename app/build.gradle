@@ -30,22 +30,13 @@ android {
     }
 }
 
-ext {
-    androidxVersion = '1.1.0'
-    materialVersion = '1.0.0'
-    contraintLayoutVersion = '1.1.3'
-    navigationVersion = '2.1.0'
-    retrofitVersion = '2.6.2'
-    loggingInterceptor = '4.2.1'
-    testJunit = '4.12'
-    junit = '1.1.0'
-    espresso = '3.2.0'
-    arrow_version = "0.10.3"
-    glide = "4.10.0"
-    locationVersion = "17.0.0"
-}
+
 
 dependencies {
+    implementation project(":data")
+    implementation project(":domain")
+    implementation project(":usecases")
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "androidx.appcompat:appcompat:${androidxVersion}"

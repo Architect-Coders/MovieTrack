@@ -4,11 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import arrow.core.Either
 import com.afrasilv.movietrack.ui.base.BaseViewModel
-import com.afrasilv.movietrack.ui.home.model.MovieInfo
-import com.afrasilv.movietrack.ui.home.repository.MoviesRepository
+import com.afrasilv.movietrack.ui.base.convertToMovieInfo
+import com.afrasilv.movietrack.ui.model.MovieInfo
+import com.afrasilv.usecases.SearchMoviesByName
 import kotlinx.coroutines.launch
 
-class SearchViewModel(private val moviesRepository: MoviesRepository) : BaseViewModel() {
+class SearchViewModel(private val searchMoviesByName: SearchMoviesByName) : BaseViewModel() {
 
     private val _model = MutableLiveData<UiModel>()
     val model: LiveData<UiModel>
@@ -18,17 +19,16 @@ class SearchViewModel(private val moviesRepository: MoviesRepository) : BaseView
         object Loading : UiModel()
         data class Content(val movies: List<MovieInfo>) : UiModel()
         data class Navigation(val movie: MovieInfo) : UiModel()
-        object RequestLocationPermission : UiModel()
     }
 
     fun searchMovies(name: String) {
         coroutineContext.plus(launch {
-            when (val result = moviesRepository.searchMoviesByName(name)) {
+            when (val result = searchMoviesByName.invoke(name)) {
                 is Either.Left -> {
                     //Error
                 }
                 is Either.Right -> {
-                    _model.value = UiModel.Content(result.b)
+                    _model.value = UiModel.Content(result.b.map { it.convertToMovieInfo() })
                 }
             }
         })

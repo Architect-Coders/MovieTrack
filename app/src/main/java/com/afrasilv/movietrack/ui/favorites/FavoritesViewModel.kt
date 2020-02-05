@@ -4,12 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import arrow.core.Either
 import com.afrasilv.movietrack.ui.base.BaseViewModel
-import com.afrasilv.movietrack.ui.home.model.MovieInfo
-import com.afrasilv.movietrack.ui.home.repository.MoviesRepository
+import com.afrasilv.movietrack.ui.base.convertToMovieInfo
+import com.afrasilv.movietrack.ui.model.MovieInfo
+import com.afrasilv.usecases.GetFavoriteMovies
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class FavoritesViewModel(private val moviesRepository: MoviesRepository) : BaseViewModel() {
+class FavoritesViewModel(private val getFavoriteMovies: GetFavoriteMovies) : BaseViewModel() {
 
     private val _model = MutableLiveData<UiModel>()
     val model: LiveData<UiModel>
@@ -23,12 +24,12 @@ class FavoritesViewModel(private val moviesRepository: MoviesRepository) : BaseV
 
     fun getFavoriteMovies() {
         coroutineContext.plus(launch(Dispatchers.IO) {
-            when (val result = moviesRepository.getFavoriteMovies()) {
+            when (val result = getFavoriteMovies.invoke()) {
                 is Either.Left -> {
                     //Error
                 }
                 is Either.Right -> {
-                    _model.postValue(UiModel.Content(result.b))
+                    _model.postValue(UiModel.Content(result.b.map { it.convertToMovieInfo() }))
                 }
             }
         })

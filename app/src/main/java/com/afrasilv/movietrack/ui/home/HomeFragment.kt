@@ -7,13 +7,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import com.afrasilv.data.repository.LocationRepository
+import com.afrasilv.data.repository.MoviesRepository
 import com.afrasilv.movietrack.MovieTrackApp
 import com.afrasilv.movietrack.R
+import com.afrasilv.movietrack.SERVICE_API_KEY
+import com.afrasilv.movietrack.data.AndroidPermissionChecker
+import com.afrasilv.movietrack.data.database.RoomDataSource
+import com.afrasilv.movietrack.data.retrofit.MovieTrackRemoteDataSource
+import com.afrasilv.movietrack.data.retrofit.RetrofitAPI
 import com.afrasilv.movietrack.getViewModel
 import com.afrasilv.movietrack.ui.details.DetailsMovieActivity
 import com.afrasilv.movietrack.ui.home.HomeViewModel.UiModel
-import com.afrasilv.movietrack.ui.home.repository.MoviesRepository
-import com.afrasilv.movietrack.ui.location.LocationRepository
+import com.afrasilv.movietrack.ui.location.PlayServicesLocationDataSource
+import com.afrasilv.usecases.GetPopularMovies
 import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : Fragment() {
@@ -27,9 +34,21 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         homeViewModel = getViewModel {
+            val app = activity!!.application as MovieTrackApp
             HomeViewModel(
-                MoviesRepository(activity!!.applicationContext as MovieTrackApp),
-                LocationRepository(activity!!)
+                GetPopularMovies(
+                    MoviesRepository(
+                        RoomDataSource(app.db),
+                        MovieTrackRemoteDataSource(
+                            RetrofitAPI()
+                        ),
+                        LocationRepository(
+                            PlayServicesLocationDataSource(app),
+                            AndroidPermissionChecker(app)
+                        ),
+                        SERVICE_API_KEY
+                    )
+                )
             )
         }
 

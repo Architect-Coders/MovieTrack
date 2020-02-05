@@ -3,13 +3,14 @@ package com.afrasilv.movietrack.ui.home
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import arrow.core.Either
+import com.afrasilv.domain.Movie
 import com.afrasilv.movietrack.ui.base.BaseViewModel
-import com.afrasilv.movietrack.ui.home.model.MovieInfo
-import com.afrasilv.movietrack.ui.home.repository.MoviesRepository
-import com.afrasilv.movietrack.ui.location.LocationRepository
+import com.afrasilv.movietrack.ui.base.convertToMovieInfo
+import com.afrasilv.movietrack.ui.model.MovieInfo
+import com.afrasilv.usecases.GetPopularMovies
 import kotlinx.coroutines.launch
 
-class HomeViewModel(private val moviesRepository: MoviesRepository, private val locationRepository: LocationRepository) : BaseViewModel() {
+class HomeViewModel(private val getPopularMovies: GetPopularMovies) : BaseViewModel() {
 
     private val _model = MutableLiveData<UiModel>()
     val model: LiveData<UiModel>
@@ -22,18 +23,17 @@ class HomeViewModel(private val moviesRepository: MoviesRepository, private val 
     }
 
     fun discoverMovies() {
-        coroutineContext.plus(launch {
+        launch {
             _model.value = UiModel.Loading
-            val region = locationRepository.findLastRegion()
-            when (val result = moviesRepository.discoverMoviesByPopularity(region)) {
+            when (val result = getPopularMovies.invoke()) {
                 is Either.Left -> {
                     //Error
                 }
                 is Either.Right -> {
-                    _model.value = UiModel.Content(result.b)
+                    _model.value = UiModel.Content(result.b.map(Movie::convertToMovieInfo))
                 }
             }
-        })
+        }
     }
 
     fun movieClicked(movie: MovieInfo) {
