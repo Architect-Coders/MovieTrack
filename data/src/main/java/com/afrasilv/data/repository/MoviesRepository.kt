@@ -12,13 +12,13 @@ import com.afrasilv.domain.Movie
 class MoviesRepository(
     private val localDataSource: LocalDataSource,
     private val remoteDataSource: RemoteDataSource,
-    private val regionRepository: LocationRepository,
+    private val locationRepository: LocationRepository,
     private val apiKey: String
 ) {
 
     suspend fun discoverMoviesByPopularity(): Either<Failure, List<Movie>> {
         return try {
-            val response = remoteDataSource.discoverMoviesByPopularity(apiKey, regionRepository.findLastRegion())
+            val response = remoteDataSource.discoverMoviesByPopularity(apiKey, locationRepository.findLastRegion())
             if (response.isRight()) {
                 val movieList = (response as Either.Right).b
                 Either.right(updateMovieListWithFavData(localDataSource, movieList))
