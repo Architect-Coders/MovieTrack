@@ -19,6 +19,9 @@ import com.afrasilv.movietrack.data.database.RoomDataSource
 import com.afrasilv.movietrack.data.retrofit.MovieTrackRemoteDataSource
 import com.afrasilv.movietrack.data.retrofit.RetrofitAPI
 import com.afrasilv.movietrack.ui.details.DetailsMovieActivity
+import com.afrasilv.movietrack.ui.favorites.FavoritesFragmentComponent
+import com.afrasilv.movietrack.ui.favorites.FavoritesFragmentModule
+import com.afrasilv.movietrack.ui.favorites.FavoritesViewModel
 import com.afrasilv.movietrack.ui.home.HomeAdapter
 import com.afrasilv.movietrack.ui.location.PlayServicesLocationDataSource
 import com.afrasilv.movietrack.ui.model.MovieInfo
@@ -28,46 +31,18 @@ import com.afrasilv.usecases.SearchPerson
 import kotlinx.android.synthetic.main.fragment_details_movie.*
 
 class CastDetailsFragment : Fragment() {
-    private lateinit var mCastViewModel: CastViewModel
     private lateinit var adapter: HomeAdapter
     private val args: CastDetailsFragmentArgs by navArgs()
 
+    private lateinit var component: CastDetailsFragmentComponent
+    private val mCastViewModel: CastViewModel by lazy { getViewModel { component.castViewModel } }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mCastViewModel = getViewModel {
-            val app = activity!!.application as MovieTrackApp
-            CastViewModel(
-                SearchPerson(
-                    CastRepository(
-                        MovieTrackRemoteDataSource(
-                            RetrofitAPI()
-                        ),
-                        SERVICE_API_KEY
-                    )
-                ),
-                GetPersonDataById(
-                    CastRepository(
-                        MovieTrackRemoteDataSource(
-                            RetrofitAPI()
-                        ),
-                        SERVICE_API_KEY
-                    )
-                ),
-                GetMoviesFromPersonId(
-                    MoviesRepository(
-                        RoomDataSource(app.db),
-                        MovieTrackRemoteDataSource(
-                            RetrofitAPI()
-                        ),
-                        LocationRepository(
-                            PlayServicesLocationDataSource(app),
-                            AndroidPermissionChecker(app)
-                        ),
-                        SERVICE_API_KEY
-                    )
-                )
-            )
-        }
+
+        component = context!!.app.component.plus(CastDetailsFragmentModule())
+
     }
 
     override fun onCreateView(

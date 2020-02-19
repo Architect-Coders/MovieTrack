@@ -1,5 +1,6 @@
 package com.afrasilv.movietrack
 
+import android.content.Context
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -35,3 +36,6 @@ inline fun <reified T : ViewModel> Fragment.getViewModel(crossinline factory: ()
 
     return ViewModelProviders.of(this, vmFactory)[T::class.java]
 }
+
+val Context.app: MovieTrackApp
+    get() = applicationContext as MovieTrackApp

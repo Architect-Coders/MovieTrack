@@ -24,7 +24,7 @@ class AppModule {
     @Provides
     @Singleton
     @Named("apiKey")
-    fun apiKeyProvider(app: Application): String = SERVICE_API_KEY
+    fun apiKeyProvider(): String = SERVICE_API_KEY
 
     @Provides
     @Singleton
@@ -32,14 +32,14 @@ class AppModule {
         app,
         MovieFavDatabase::class.java,
         "movie-track-db"
-    )
+    ).build()
 
     @Provides
     fun localDataSourceProvider(db: MovieFavDatabase): LocalDataSource = RoomDataSource(db)
 
     @Provides
-    fun remoteDataSourceProvider(retrofitAPI: RetrofitAPI): RemoteDataSource =
-        MovieTrackRemoteDataSource(retrofitAPI)
+    fun remoteDataSourceProvider(): RemoteDataSource =
+        MovieTrackRemoteDataSource()
 
     @Provides
     fun locationDataSourceProvider(app: Application): LocationDataSource =

@@ -11,49 +11,35 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.afrasilv.data.repository.LocationRepository
 import com.afrasilv.data.repository.MoviesRepository
-import com.afrasilv.movietrack.MovieTrackApp
-import com.afrasilv.movietrack.R
-import com.afrasilv.movietrack.SERVICE_API_KEY
+import com.afrasilv.movietrack.*
 import com.afrasilv.movietrack.data.AndroidPermissionChecker
 import com.afrasilv.movietrack.data.database.RoomDataSource
 import com.afrasilv.movietrack.data.retrofit.MovieTrackRemoteDataSource
 import com.afrasilv.movietrack.data.retrofit.RetrofitAPI
-import com.afrasilv.movietrack.getViewModel
 import com.afrasilv.movietrack.ui.details.DetailsMovieActivity
 import com.afrasilv.movietrack.ui.home.HomeAdapter
+import com.afrasilv.movietrack.ui.home.HomeFragmentComponent
+import com.afrasilv.movietrack.ui.home.HomeFragmentModule
+import com.afrasilv.movietrack.ui.home.HomeViewModel
 import com.afrasilv.movietrack.ui.location.PlayServicesLocationDataSource
 import com.afrasilv.usecases.SearchMoviesByName
 import kotlinx.android.synthetic.main.fragment_search.*
 
-
 class SearchFragment : Fragment() {
 
-    private lateinit var searchViewModel: SearchViewModel
     private lateinit var adapter: HomeAdapter
+
+    private lateinit var component: SearchFragmentComponent
+
+    private val searchViewModel: SearchViewModel by lazy { getViewModel { component.searchViewModel } }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        searchViewModel = getViewModel {
-            val app = activity!!.application as MovieTrackApp
-            SearchViewModel(
-                SearchMoviesByName(
-                    MoviesRepository(
-                        RoomDataSource(app.db),
-                        MovieTrackRemoteDataSource(
-                            RetrofitAPI()
-                        ),
-                        LocationRepository(
-                            PlayServicesLocationDataSource(app),
-                            AndroidPermissionChecker(app)
-                        ),
-                        SERVICE_API_KEY
-                    )
-                )
-            )
-        }
+        component = context!!.app.component.plus(SearchFragmentModule())
+
         return inflater.inflate(R.layout.fragment_search, container, false)
     }
 

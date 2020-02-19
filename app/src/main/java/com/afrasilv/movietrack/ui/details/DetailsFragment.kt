@@ -20,6 +20,9 @@ import com.afrasilv.movietrack.data.retrofit.MovieTrackRemoteDataSource
 import com.afrasilv.movietrack.data.retrofit.RetrofitAPI
 import com.afrasilv.movietrack.ui.details.adapter.CastAdapter
 import com.afrasilv.movietrack.ui.details.model.Cast
+import com.afrasilv.movietrack.ui.favorites.FavoritesFragmentComponent
+import com.afrasilv.movietrack.ui.favorites.FavoritesFragmentModule
+import com.afrasilv.movietrack.ui.favorites.FavoritesViewModel
 import com.afrasilv.movietrack.ui.location.PlayServicesLocationDataSource
 import com.afrasilv.usecases.CheckIfMovieIsFav
 import com.afrasilv.usecases.GetMovieCredits
@@ -27,52 +30,17 @@ import com.afrasilv.usecases.RemoveIfFav
 import kotlinx.android.synthetic.main.fragment_details_movie.*
 
 class DetailsFragment : Fragment() {
-    private lateinit var mDetailsViewModel: DetailsViewModel
     private lateinit var adapter: CastAdapter
+
     private val args: DetailsFragmentArgs by navArgs()
+    private lateinit var component: DetailsFragmentComponent
+
+    private val mDetailsViewModel: DetailsViewModel by lazy { getViewModel { component.detailsViewModel } }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mDetailsViewModel = getViewModel {
-            val app = activity!!.application as MovieTrackApp
-            DetailsViewModel(
-                CheckIfMovieIsFav(
-                    MoviesRepository(
-                        RoomDataSource(app.db),
-                        MovieTrackRemoteDataSource(
-                            RetrofitAPI()
-                        ),
-                        LocationRepository(
-                            PlayServicesLocationDataSource(app),
-                            AndroidPermissionChecker(app)
-                        ),
-                        SERVICE_API_KEY
-                    )
-                ),
-                RemoveIfFav(
-                    MoviesRepository(
-                        RoomDataSource(app.db),
-                        MovieTrackRemoteDataSource(
-                            RetrofitAPI()
-                        ),
-                        LocationRepository(
-                            PlayServicesLocationDataSource(app),
-                            AndroidPermissionChecker(app)
-                        ),
-                        SERVICE_API_KEY
-                    )
+        component = context!!.app.component.plus(DetailsFragmentModule())
 
-                ),
-                GetMovieCredits(
-                    CreditsRepository(
-                        MovieTrackRemoteDataSource(
-                            RetrofitAPI()
-                        ),
-                        SERVICE_API_KEY
-                    )
-                )
-            )
-        }
     }
 
     override fun onCreateView(
