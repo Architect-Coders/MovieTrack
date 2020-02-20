@@ -31,7 +31,6 @@ android {
 }
 
 
-
 dependencies {
     implementation project(":data")
     implementation project(":domain")
@@ -53,9 +52,6 @@ dependencies {
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation "com.google.android.gms:play-services-location:${locationVersion}"
-    testImplementation "junit:junit:${testJunit}"
-    androidTestImplementation "androidx.test.ext:junit:${junit}"
-    androidTestImplementation "androidx.test.espresso:espresso-core:${espresso}"
 
     implementation 'com.karumi:dexter:6.0.1'
 
@@ -80,4 +76,12 @@ dependencies {
     //Dagger 2
     api "com.google.dagger:dagger:${dagger}"
     kapt "com.google.dagger:dagger-compiler:${dagger}"
+
+    // Tests
+    testImplementation "junit:junit:${testJunit}"
+    androidTestImplementation "androidx.test.ext:junit:${junit}"
+    androidTestImplementation "androidx.test.espresso:espresso-core:${espresso}"
+    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:${mockitoKotlin}"
+    testImplementation "org.mockito:mockito-inline:${mockitoInline}"
+
 }

@@ -16,13 +16,12 @@ class SearchViewModel(private val searchMoviesByName: SearchMoviesByName) : Base
         get() = _model
 
     sealed class UiModel {
-        object Loading : UiModel()
         data class Content(val movies: List<MovieInfo>) : UiModel()
         data class Navigation(val movie: MovieInfo) : UiModel()
     }
 
     fun searchMovies(name: String) {
-        coroutineContext.plus(launch {
+        launch {
             when (val result = searchMoviesByName.invoke(name)) {
                 is Either.Left -> {
                     //Error
@@ -31,7 +30,7 @@ class SearchViewModel(private val searchMoviesByName: SearchMoviesByName) : Base
                     _model.value = UiModel.Content(result.b.map { it.convertToMovieInfo() })
                 }
             }
-        })
+        }
     }
 
     fun movieClicked(movie: MovieInfo) {

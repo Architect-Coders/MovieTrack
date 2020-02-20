@@ -17,7 +17,6 @@ class FavoritesViewModel(private val getFavoriteMovies: GetFavoriteMovies) : Bas
         get() = _model
 
     sealed class UiModel {
-        object Loading : UiModel()
         data class Content(val movies: List<MovieInfo>) : UiModel()
         data class Navigation(val movie: MovieInfo) : UiModel()
     }

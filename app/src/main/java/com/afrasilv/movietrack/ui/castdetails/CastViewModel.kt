@@ -26,7 +26,6 @@ class CastViewModel(
         get() = _model
 
     sealed class UiModel {
-        object Loading : UiModel()
         class ShowMovies(val movieList: List<MovieInfo>) : UiModel()
         class Navigation(val movie: MovieInfo) : UiModel()
         class PersonData(val person: Person) : UiModel()

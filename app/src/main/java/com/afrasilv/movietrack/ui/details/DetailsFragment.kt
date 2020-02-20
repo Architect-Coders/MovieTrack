@@ -10,23 +10,12 @@ import androidx.core.text.buildSpannedString
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
-import com.afrasilv.data.repository.CreditsRepository
-import com.afrasilv.data.repository.LocationRepository
-import com.afrasilv.data.repository.MoviesRepository
-import com.afrasilv.movietrack.*
-import com.afrasilv.movietrack.data.AndroidPermissionChecker
-import com.afrasilv.movietrack.data.database.RoomDataSource
-import com.afrasilv.movietrack.data.retrofit.MovieTrackRemoteDataSource
-import com.afrasilv.movietrack.data.retrofit.RetrofitAPI
+import com.afrasilv.movietrack.R
+import com.afrasilv.movietrack.app
+import com.afrasilv.movietrack.getViewModel
+import com.afrasilv.movietrack.loadUrl
 import com.afrasilv.movietrack.ui.details.adapter.CastAdapter
 import com.afrasilv.movietrack.ui.details.model.Cast
-import com.afrasilv.movietrack.ui.favorites.FavoritesFragmentComponent
-import com.afrasilv.movietrack.ui.favorites.FavoritesFragmentModule
-import com.afrasilv.movietrack.ui.favorites.FavoritesViewModel
-import com.afrasilv.movietrack.ui.location.PlayServicesLocationDataSource
-import com.afrasilv.usecases.CheckIfMovieIsFav
-import com.afrasilv.usecases.GetMovieCredits
-import com.afrasilv.usecases.RemoveIfFav
 import kotlinx.android.synthetic.main.fragment_details_movie.*
 
 class DetailsFragment : Fragment() {

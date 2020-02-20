@@ -10,4 +10,13 @@ dependencies {
     implementation "io.arrow-kt:arrow-core:$arrow_version"
     implementation "io.arrow-kt:arrow-syntax:$arrow_version"
     kapt "io.arrow-kt:arrow-meta:$arrow_version"
+
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.2.2"
+
+    // Tests
+    testImplementation "junit:junit:$testJunit"
+    testImplementation "androidx.test.ext:junit:$junit"
+    testImplementation "androidx.test.espresso:espresso-core:$espresso"
+    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockitoKotlin"
+    testImplementation "org.mockito:mockito-inline:$mockitoInline"
 }

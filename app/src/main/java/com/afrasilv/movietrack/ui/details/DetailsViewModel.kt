@@ -12,7 +12,6 @@ import com.afrasilv.movietrack.ui.model.MovieInfo
 import com.afrasilv.usecases.CheckIfMovieIsFav
 import com.afrasilv.usecases.GetMovieCredits
 import com.afrasilv.usecases.RemoveIfFav
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class DetailsViewModel(
@@ -26,7 +25,6 @@ class DetailsViewModel(
         get() = _model
 
     sealed class UiModel {
-        object Loading : UiModel()
         class IsFav(val isFav: Boolean) : UiModel()
         class ShowCast(val castList: List<Cast>) : UiModel()
         class Navigation(val cast: Cast) : UiModel()

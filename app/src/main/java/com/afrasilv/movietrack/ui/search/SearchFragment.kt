@@ -9,20 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import com.afrasilv.data.repository.LocationRepository
-import com.afrasilv.data.repository.MoviesRepository
-import com.afrasilv.movietrack.*
-import com.afrasilv.movietrack.data.AndroidPermissionChecker
-import com.afrasilv.movietrack.data.database.RoomDataSource
-import com.afrasilv.movietrack.data.retrofit.MovieTrackRemoteDataSource
-import com.afrasilv.movietrack.data.retrofit.RetrofitAPI
+import com.afrasilv.movietrack.R
+import com.afrasilv.movietrack.app
+import com.afrasilv.movietrack.getViewModel
 import com.afrasilv.movietrack.ui.details.DetailsMovieActivity
 import com.afrasilv.movietrack.ui.home.HomeAdapter
-import com.afrasilv.movietrack.ui.home.HomeFragmentComponent
-import com.afrasilv.movietrack.ui.home.HomeFragmentModule
-import com.afrasilv.movietrack.ui.home.HomeViewModel
-import com.afrasilv.movietrack.ui.location.PlayServicesLocationDataSource
-import com.afrasilv.usecases.SearchMoviesByName
 import kotlinx.android.synthetic.main.fragment_search.*
 
 class SearchFragment : Fragment() {
