@@ -12,13 +12,15 @@ import com.afrasilv.movietrack.ui.model.MovieInfo
 import com.afrasilv.usecases.CheckIfMovieIsFav
 import com.afrasilv.usecases.GetMovieCredits
 import com.afrasilv.usecases.RemoveIfFav
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 
 class DetailsViewModel(
     private val checkIfMovieIsFav: CheckIfMovieIsFav,
     private val removeIfFav: RemoveIfFav,
-    private val getMovieCredits: GetMovieCredits
-) : BaseViewModel() {
+    private val getMovieCredits: GetMovieCredits,
+    uiDispatcher: CoroutineDispatcher
+) : BaseViewModel(uiDispatcher) {
 
     private val _model = MutableLiveData<Event<UiModel>>()
     val model: LiveData<Event<UiModel>>
@@ -50,7 +52,8 @@ class DetailsViewModel(
     fun getCredits(movieId: Int) {
         launch {
             when (val response = getMovieCredits.invoke(movieId)) {
-                is Either.Right -> _model.value = Event(UiModel.ShowCast(response.b.map { it.convertToCast() }))
+                is Either.Right -> _model.value =
+                    Event(UiModel.ShowCast(response.b.map { it.convertToCast() }))
             }
         }
     }

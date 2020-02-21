@@ -5,12 +5,13 @@ import com.afrasilv.usecases.GetPopularMovies
 import dagger.Module
 import dagger.Provides
 import dagger.Subcomponent
+import kotlinx.coroutines.Dispatchers
 
 @Module
 class HomeFragmentModule {
 
     @Provides
-    fun homeViewModelProvider(getPopularMovies: GetPopularMovies) = HomeViewModel(getPopularMovies)
+    fun homeViewModelProvider(getPopularMovies: GetPopularMovies) = HomeViewModel(getPopularMovies, Dispatchers.Main)
 
     @Provides
     fun getPopularMoviesProvider(moviesRepository: MoviesRepository) =

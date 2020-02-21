@@ -83,5 +83,6 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-core:${espresso}"
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:${mockitoKotlin}"
     testImplementation "org.mockito:mockito-inline:${mockitoInline}"
+    testImplementation "android.arch.core:core-testing:1.1.1"
 
 }

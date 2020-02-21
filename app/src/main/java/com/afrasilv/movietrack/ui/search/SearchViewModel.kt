@@ -7,9 +7,13 @@ import com.afrasilv.movietrack.ui.base.BaseViewModel
 import com.afrasilv.movietrack.ui.base.convertToMovieInfo
 import com.afrasilv.movietrack.ui.model.MovieInfo
 import com.afrasilv.usecases.SearchMoviesByName
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 
-class SearchViewModel(private val searchMoviesByName: SearchMoviesByName) : BaseViewModel() {
+class SearchViewModel(
+    private val searchMoviesByName: SearchMoviesByName,
+    uiDispatcher: CoroutineDispatcher
+) : BaseViewModel(uiDispatcher) {
 
     private val _model = MutableLiveData<UiModel>()
     val model: LiveData<UiModel>

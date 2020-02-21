@@ -8,6 +8,7 @@ import com.afrasilv.usecases.RemoveIfFav
 import dagger.Module
 import dagger.Provides
 import dagger.Subcomponent
+import kotlinx.coroutines.Dispatchers
 
 @Module
 class DetailsFragmentModule {
@@ -16,7 +17,7 @@ class DetailsFragmentModule {
     fun favoritesViewModelProvider(checkIfMovieIsFav: CheckIfMovieIsFav,
                                    removeIfFav: RemoveIfFav,
                                    getMovieCredits: GetMovieCredits
-    ) = DetailsViewModel(checkIfMovieIsFav, removeIfFav, getMovieCredits)
+    ) = DetailsViewModel(checkIfMovieIsFav, removeIfFav, getMovieCredits, Dispatchers.Main)
 
     @Provides
     fun checkIfMovieIsFav(moviesRepository: MoviesRepository) =

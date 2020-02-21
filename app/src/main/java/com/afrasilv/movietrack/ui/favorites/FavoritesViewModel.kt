@@ -7,10 +7,14 @@ import com.afrasilv.movietrack.ui.base.BaseViewModel
 import com.afrasilv.movietrack.ui.base.convertToMovieInfo
 import com.afrasilv.movietrack.ui.model.MovieInfo
 import com.afrasilv.usecases.GetFavoriteMovies
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class FavoritesViewModel(private val getFavoriteMovies: GetFavoriteMovies) : BaseViewModel() {
+class FavoritesViewModel(
+    private val getFavoriteMovies: GetFavoriteMovies,
+    uiDispatcher: CoroutineDispatcher
+) : BaseViewModel(uiDispatcher) {
 
     private val _model = MutableLiveData<UiModel>()
     val model: LiveData<UiModel>

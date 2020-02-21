@@ -8,6 +8,7 @@ import com.afrasilv.usecases.SearchPerson
 import dagger.Module
 import dagger.Provides
 import dagger.Subcomponent
+import kotlinx.coroutines.Dispatchers
 
 @Module
 class CastDetailsFragmentModule {
@@ -17,7 +18,7 @@ class CastDetailsFragmentModule {
         searchPerson: SearchPerson,
         getPersonDataById: GetPersonDataById,
         getMoviesFromPersonId: GetMoviesFromPersonId
-    ) = CastViewModel(searchPerson, getPersonDataById, getMoviesFromPersonId)
+    ) = CastViewModel(searchPerson, getPersonDataById, getMoviesFromPersonId, Dispatchers.Main)
 
     @Provides
     fun searchPerson(castRepository: CastRepository) =

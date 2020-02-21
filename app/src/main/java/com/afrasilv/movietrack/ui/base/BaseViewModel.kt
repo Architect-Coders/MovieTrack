@@ -1,27 +1,20 @@
 package com.afrasilv.movietrack.ui.base
 
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.OnLifecycleEvent
+import androidx.annotation.CallSuper
 import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlin.coroutines.CoroutineContext
+import com.antonioleiva.mymovies.ui.common.Scope
+import kotlinx.coroutines.CoroutineDispatcher
 
-open class BaseViewModel : ViewModel(), CoroutineScope {
+open class BaseViewModel(uiDispatcher: CoroutineDispatcher) : ViewModel(),
+    Scope by Scope.Impl(uiDispatcher) {
 
-    //region common in viewmodel
-    private val job = Job()
-
-    // implement and override coroutineContext for cancel all coroutines
-    // if user close the view
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main + job
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    fun cancelJob() {
-        job.cancel()
+    init {
+        initScope()
     }
-    //endregion
 
+    @CallSuper
+    override fun onCleared() {
+        destroyScope()
+        super.onCleared()
+    }
 }

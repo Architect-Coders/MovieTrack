@@ -12,14 +12,16 @@ import com.afrasilv.movietrack.ui.model.MovieInfo
 import com.afrasilv.usecases.GetMoviesFromPersonId
 import com.afrasilv.usecases.GetPersonDataById
 import com.afrasilv.usecases.SearchPerson
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class CastViewModel(
     private val searchPerson: SearchPerson,
     private val getPersonDataById: GetPersonDataById,
-    private val getMoviesFromPersonId: GetMoviesFromPersonId
-) : BaseViewModel() {
+    private val getMoviesFromPersonId: GetMoviesFromPersonId,
+    uiDispatcher: CoroutineDispatcher
+) : BaseViewModel(uiDispatcher) {
 
     private val _model = MutableLiveData<Event<UiModel>>()
     val model: LiveData<Event<UiModel>>

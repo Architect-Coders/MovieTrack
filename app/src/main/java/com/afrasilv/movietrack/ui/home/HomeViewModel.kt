@@ -8,9 +8,10 @@ import com.afrasilv.movietrack.ui.base.BaseViewModel
 import com.afrasilv.movietrack.ui.base.convertToMovieInfo
 import com.afrasilv.movietrack.ui.model.MovieInfo
 import com.afrasilv.usecases.GetPopularMovies
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 
-class HomeViewModel(private val getPopularMovies: GetPopularMovies) : BaseViewModel() {
+class HomeViewModel(private val getPopularMovies: GetPopularMovies, uiDispatcher: CoroutineDispatcher) : BaseViewModel(uiDispatcher) {
 
     private val _model = MutableLiveData<UiModel>()
     val model: LiveData<UiModel>
