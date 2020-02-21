@@ -26,16 +26,16 @@ class FavoritesViewModel(
     }
 
     fun getFavoriteMovies() {
-        coroutineContext.plus(launch(Dispatchers.IO) {
+        launch {
             when (val result = getFavoriteMovies.invoke()) {
                 is Either.Left -> {
                     //Error
                 }
                 is Either.Right -> {
-                    _model.postValue(UiModel.Content(result.b.map { it.convertToMovieInfo() }))
+                    _model.value = UiModel.Content(result.b.map { it.convertToMovieInfo() })
                 }
             }
-        })
+        }
     }
 
     fun movieClicked(movie: MovieInfo) {

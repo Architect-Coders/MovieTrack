@@ -9,7 +9,6 @@ import com.afrasilv.domain.FailureModel
 import com.afrasilv.movietrack.ui.base.convertToMovieInfo
 import com.afrasilv.movietrack.ui.home.HomeViewModel
 import com.afrasilv.usecases.GetPopularMovies
-import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.Dispatchers

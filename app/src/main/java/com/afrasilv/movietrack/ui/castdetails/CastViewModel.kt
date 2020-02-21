@@ -13,7 +13,6 @@ import com.afrasilv.usecases.GetMoviesFromPersonId
 import com.afrasilv.usecases.GetPersonDataById
 import com.afrasilv.usecases.SearchPerson
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class CastViewModel(
@@ -34,7 +33,7 @@ class CastViewModel(
     }
 
     fun getMoviesByCastId(name: String) {
-        launch(Dispatchers.IO) {
+        launch {
             when (val response = searchPerson.invoke(name)) {
                 is Either.Right -> {
                     getPersonDataByPersonId(response.b)
@@ -45,18 +44,18 @@ class CastViewModel(
     }
 
     private fun getPersonDataByPersonId(personId: Int) {
-        launch(Dispatchers.IO) {
+        launch {
             when (val response = getPersonDataById.invoke(personId)) {
-                is Either.Right -> _model.postValue(Event(UiModel.PersonData(response.b)))
+                is Either.Right -> _model.value = Event(UiModel.PersonData(response.b))
             }
         }
     }
 
 
     private fun getCastMovieDataById(personId: Int) {
-        launch(Dispatchers.IO) {
+        launch {
             when (val response = getMoviesFromPersonId.invoke(personId)) {
-                is Either.Right -> _model.postValue(Event(UiModel.ShowMovies(response.b.map(Movie::convertToMovieInfo))))
+                is Either.Right -> _model.value = Event(UiModel.ShowMovies(response.b.map(Movie::convertToMovieInfo)))
             }
         }
     }
