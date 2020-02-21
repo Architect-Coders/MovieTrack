@@ -35,10 +35,7 @@ class CastViewModelTest {
 
     @Mock
     lateinit var getMoviesFromPersonId: GetMoviesFromPersonId
-
-    @Mock
-    lateinit var observer: Observer<Event<CastViewModel.UiModel>>
-
+    
     private lateinit var vm: CastViewModel
 
     @Before
@@ -56,12 +53,6 @@ class CastViewModelTest {
         runBlocking {
 
             val personMock  = mock<Person>()
-            val movieMockList = listOf(
-                movieMock.copy(id = 0),
-                movieMock.copy(id = 1),
-                movieMock.copy(id = 2),
-                movieMock.copy(id = 3)
-            )
 
             whenever(searchPerson.invoke("name")).thenReturn(
                 Either.right(
