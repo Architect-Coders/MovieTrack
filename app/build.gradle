@@ -84,5 +84,7 @@ dependencies {
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:${mockitoKotlin}"
     testImplementation "org.mockito:mockito-inline:${mockitoInline}"
     testImplementation "android.arch.core:core-testing:1.1.1"
+    testImplementation "com.google.dagger:dagger:${dagger}"
+    kaptTest "com.google.dagger:dagger-compiler:${dagger}"
 
 }

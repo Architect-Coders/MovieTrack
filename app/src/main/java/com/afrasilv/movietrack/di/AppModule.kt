@@ -11,7 +11,6 @@ import com.afrasilv.movietrack.data.AndroidPermissionChecker
 import com.afrasilv.movietrack.data.database.MovieFavDatabase
 import com.afrasilv.movietrack.data.database.RoomDataSource
 import com.afrasilv.movietrack.data.retrofit.MovieTrackRemoteDataSource
-import com.afrasilv.movietrack.data.retrofit.RetrofitAPI
 import com.afrasilv.movietrack.ui.location.PlayServicesLocationDataSource
 import dagger.Module
 import dagger.Provides

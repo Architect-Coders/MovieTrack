@@ -24,10 +24,7 @@ class RoomDataSource(db: MovieFavDatabase) :
     override suspend fun getFavoriteMovies(): List<Movie> =
         withContext(Dispatchers.IO) {
             movieDao.getAll().map {
-                val isFav = false
-                it.convertToDomainMovie().apply {
-                    isFavorite = isFav
-                }
+                it.convertToDomainMovie()
             }
         }
 

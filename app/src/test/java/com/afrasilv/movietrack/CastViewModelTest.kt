@@ -1,7 +1,6 @@
 package com.afrasilv.movietrack
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.Observer
 import arrow.core.Either
 import com.afrasilv.domain.Person
 import com.afrasilv.movietrack.ui.base.convertToMovieInfo
@@ -35,7 +34,7 @@ class CastViewModelTest {
 
     @Mock
     lateinit var getMoviesFromPersonId: GetMoviesFromPersonId
-    
+
     private lateinit var vm: CastViewModel
 
     @Before
