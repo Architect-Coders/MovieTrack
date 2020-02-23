@@ -9,10 +9,10 @@ import javax.inject.Singleton
 interface MoviesComponentTest {
 
     fun plus(module: FakeHomeFragmentModule): FakeHomeFragmentComponent
-//    fun plus(module: FavoritesFragmentModule): FavoritesFragmentComponent
-//    fun plus(searchFragmentModule: SearchFragmentModule): SearchFragmentComponent
-//    fun plus(castDetailsFragmentModule: CastDetailsFragmentModule): CastDetailsFragmentComponent
-//    fun plus(detailsFragmentModule: DetailsFragmentModule): DetailsFragmentComponent
+    fun plus(module: FakeFavoritesFragmentModule): FakeFavoritesFragmentComponent
+    fun plus(searchFragmentModule: FakeSearchFragmentModule): FakeSearchFragmentComponent
+    fun plus(castDetailsFragmentModule: FakeCastDetailsFragmentModule): FakeCastDetailsFragmentComponent
+    fun plus(detailsFragmentModule: FakeDetailsFragmentModule): FakeDetailsFragmentComponent
 
     @Component.Factory
     interface Factory {

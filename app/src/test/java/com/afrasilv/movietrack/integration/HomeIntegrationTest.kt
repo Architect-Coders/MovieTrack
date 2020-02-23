@@ -26,7 +26,6 @@ class HomeIntegrationTest {
 
     @Before
     fun setup() {
-        //TODO
         component = DaggerMoviesComponentTest.factory().create().plus(FakeHomeFragmentModule())
         viewModel = component.homeViewModel
     }
@@ -35,11 +34,10 @@ class HomeIntegrationTest {
     fun `call to discoverMovies`() {
         viewModel.discoverMovies()
 
-        viewModel.model.observeForever {
-            assert(it is HomeViewModel.UiModel.Content)
-            it as HomeViewModel.UiModel.Content
-            assertEquals(it.movies, movieList.map { it.convertToMovieInfo() })
+        viewModel.model.observeForever { event ->
+            assert(event is HomeViewModel.UiModel.Content)
+            event as HomeViewModel.UiModel.Content
+            assertEquals(event.movies, movieList.map { it.convertToMovieInfo() })
         }
-
     }
 }

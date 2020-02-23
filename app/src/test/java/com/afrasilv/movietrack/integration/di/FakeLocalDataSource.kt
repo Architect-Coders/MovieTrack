@@ -3,10 +3,9 @@ package com.afrasilv.movietrack.integration.di
 import arrow.core.extensions.list.foldable.exists
 import com.afrasilv.data.source.LocalDataSource
 import com.afrasilv.domain.Movie
+import com.afrasilv.movietrack.movieList
 
 class FakeLocalDataSource : LocalDataSource {
-
-    private val movieList = mutableListOf<Movie>()
 
     override suspend fun getFavoriteMovies(): List<Movie> {
         return movieList

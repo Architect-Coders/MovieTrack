@@ -10,14 +10,14 @@ val castRemoteMock: CastRemote = CastRemote(0, "", "", 0, 0, "", 0, "")
 
 val personMock: Person = Person("", "", 0, "", 0, "", 0.0, "", "", true, "", "")
 
-val movieList = listOf(
+val movieList = mutableListOf(
     movieMock.copy(id = 0),
     movieMock.copy(id = 1),
     movieMock.copy(id = 2),
     movieMock.copy(id = 3)
 )
 
-val castRemoteList = listOf(
+val castRemoteList = mutableListOf(
     castRemoteMock.copy(id = 0),
     castRemoteMock.copy(id = 1),
     castRemoteMock.copy(id = 2),
