@@ -16,7 +16,7 @@ import dagger.Component
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [AppModule::class, DataModule::class])
+@Component(modules = [AppModule::class, ServiceModule::class, DataModule::class])
 interface MoviesComponent {
 
     fun plus(module: HomeFragmentModule): HomeFragmentComponent

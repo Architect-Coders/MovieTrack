@@ -1,4 +1,4 @@
-package com.afrasilv.movietrack.ui
+package com.afrasilv.movietrack
 
 import com.afrasilv.movietrack.data.retrofit.RetrofitAPI
 

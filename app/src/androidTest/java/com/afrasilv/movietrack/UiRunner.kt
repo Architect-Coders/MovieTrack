@@ -1,4 +1,4 @@
-package com.afrasilv.movietrack.ui
+package com.afrasilv.movietrack
 
 import android.app.Application
 import android.content.Context

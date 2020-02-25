@@ -1,4 +1,4 @@
-package com.afrasilv.movietrack.ui
+package com.afrasilv.movietrack
 
 import android.app.Application
 import com.afrasilv.movietrack.data.retrofit.RetrofitAPI
@@ -14,11 +14,13 @@ import javax.inject.Named
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [
-    AppModule::class,
-    DataModule::class,
-    UiTestServerModule::class
-])
+@Component(
+    modules = [
+        AppModule::class,
+        UiTestServerModule::class,
+        DataModule::class
+    ]
+)
 interface UiTestComponent : MoviesComponent {
 
     val retrofitAPI: RetrofitAPI
@@ -37,13 +39,13 @@ class UiTestServerModule {
     @Provides
     @Singleton
     @Named("baseUrlTest")
-    fun baseUrlProvider(): String = "http://127.0.0.1:8080"
+    fun baseUrlTestProvider(): String = "http://127.0.0.1:8080"
 
 
     @Provides
     @Singleton
     fun mockWebServerProvider(): MockWebServer {
-        var mockWebServer:MockWebServer? = null
+        var mockWebServer: MockWebServer? = null
         val thread = Thread(Runnable {
             mockWebServer = MockWebServer()
             mockWebServer?.start(8080)
@@ -55,7 +57,9 @@ class UiTestServerModule {
 
     @Provides
     @Singleton
-    fun retrofitTestAPIProvider(
-        @Named("baseUrlTest") baseUrlTest: String): RetrofitTestAPI = RetrofitTestAPI(baseUrlTest)
+    fun retrofitAPIProvider(
+        @Named("baseUrlTest") baseUrlTest: String
+    ): RetrofitAPI =
+        RetrofitAPI(baseUrlTest)
 
 }

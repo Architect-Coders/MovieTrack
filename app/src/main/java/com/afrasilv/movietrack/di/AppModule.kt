@@ -35,16 +35,6 @@ class AppModule {
     ).build()
 
     @Provides
-    @Singleton
-    @Named("baseUrl")
-    fun baseUrlProvider(): String = "https://api.themoviedb.org/3/"
-
-    @Provides
-    @Singleton
-    fun retrofitAPIProvider(
-        @Named("baseUrl") baseUrl: String) = RetrofitAPI(baseUrl)
-
-    @Provides
     fun localDataSourceProvider(db: MovieFavDatabase): LocalDataSource = RoomDataSource(db)
 
     @Provides
