@@ -6,14 +6,14 @@ import com.afrasilv.domain.*
 import com.afrasilv.movietrack.data.convertToMovie
 import java.net.URLEncoder
 
-class MovieTrackRemoteDataSource : RemoteDataSource {
+class MovieTrackRemoteDataSource(private val retrofitAPI: RetrofitAPI) : RemoteDataSource {
     override suspend fun discoverMoviesByPopularity(
         apiKey: String,
         region: String
     ): Either<Failure, List<Movie>> {
         return try {
             val response =
-                RetrofitAPI.service.discoverMoviesByPopularityAsync(apiKey, region)
+                retrofitAPI.service.discoverMoviesByPopularityAsync(apiKey, region)
             if (response.isSuccessful && response.body() != null) {
                 Either.right(response.body()!!.results.map { it.convertToMovie() })
             } else
@@ -28,7 +28,7 @@ class MovieTrackRemoteDataSource : RemoteDataSource {
         name: String
     ): Either<Failure, List<Movie>> {
         return try {
-            val response = RetrofitAPI.service.searchMovieByName(
+            val response = retrofitAPI.service.searchMovieByName(
                 apiKey,
                 URLEncoder.encode(name, "UTF-8")
             )
@@ -46,7 +46,7 @@ class MovieTrackRemoteDataSource : RemoteDataSource {
         personId: Int
     ): Either<Failure, List<Movie>> {
         return try {
-            val response = RetrofitAPI.service.getMoviesFromPersonId(
+            val response = retrofitAPI.service.getMoviesFromPersonId(
                 personId,
                 apiKey
             )
@@ -65,7 +65,7 @@ class MovieTrackRemoteDataSource : RemoteDataSource {
         movieId: Int
     ): Either<Failure, List<CastRemote>> {
         return try {
-            val response = RetrofitAPI.service.getMovieCredits(
+            val response = retrofitAPI.service.getMovieCredits(
                 movieId,
                 apiKey
             )
@@ -81,7 +81,7 @@ class MovieTrackRemoteDataSource : RemoteDataSource {
 
     override suspend fun searchPerson(apiKey: String, name: String): Either<Failure, Int> {
         return try {
-            val response = RetrofitAPI.service.searchPerson(
+            val response = retrofitAPI.service.searchPerson(
                 apiKey,
                 URLEncoder.encode(name, "UTF-8")
             )
@@ -104,7 +104,7 @@ class MovieTrackRemoteDataSource : RemoteDataSource {
         personId: Int
     ): Either<Failure, Person> {
         return try {
-            val response = RetrofitAPI.service.getPersonData(
+            val response = retrofitAPI.service.getPersonData(
                 personId,
                 apiKey
             )

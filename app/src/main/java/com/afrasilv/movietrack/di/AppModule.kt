@@ -11,6 +11,7 @@ import com.afrasilv.movietrack.data.AndroidPermissionChecker
 import com.afrasilv.movietrack.data.database.MovieFavDatabase
 import com.afrasilv.movietrack.data.database.RoomDataSource
 import com.afrasilv.movietrack.data.retrofit.MovieTrackRemoteDataSource
+import com.afrasilv.movietrack.data.retrofit.RetrofitAPI
 import com.afrasilv.movietrack.ui.location.PlayServicesLocationDataSource
 import dagger.Module
 import dagger.Provides
@@ -34,11 +35,21 @@ class AppModule {
     ).build()
 
     @Provides
+    @Singleton
+    @Named("baseUrl")
+    fun baseUrlProvider(): String = "https://api.themoviedb.org/3/"
+
+    @Provides
+    @Singleton
+    fun retrofitAPIProvider(
+        @Named("baseUrl") baseUrl: String) = RetrofitAPI(baseUrl)
+
+    @Provides
     fun localDataSourceProvider(db: MovieFavDatabase): LocalDataSource = RoomDataSource(db)
 
     @Provides
-    fun remoteDataSourceProvider(): RemoteDataSource =
-        MovieTrackRemoteDataSource()
+    fun remoteDataSourceProvider(retrofitAPI: RetrofitAPI): RemoteDataSource =
+        MovieTrackRemoteDataSource(retrofitAPI)
 
     @Provides
     fun locationDataSourceProvider(app: Application): LocationDataSource =

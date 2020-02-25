@@ -4,7 +4,7 @@ import android.app.Application
 import com.afrasilv.movietrack.di.DaggerMoviesComponent
 import com.afrasilv.movietrack.di.MoviesComponent
 
-class MovieTrackApp : Application() {
+open class MovieTrackApp : Application() {
 
     lateinit var component: MoviesComponent
         private set
@@ -12,8 +12,10 @@ class MovieTrackApp : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        component = DaggerMoviesComponent
-            .factory()
-            .create(this)
+        component = initMoviesComponent()
     }
+
+    open fun initMoviesComponent() = DaggerMoviesComponent
+        .factory()
+        .create(this)
 }

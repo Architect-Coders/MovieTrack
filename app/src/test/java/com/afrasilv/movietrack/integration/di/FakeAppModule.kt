@@ -5,6 +5,7 @@ import com.afrasilv.data.source.LocalDataSource
 import com.afrasilv.data.source.LocationDataSource
 import com.afrasilv.data.source.RemoteDataSource
 import com.afrasilv.movietrack.SERVICE_API_KEY
+import com.afrasilv.movietrack.data.retrofit.RetrofitAPI
 import dagger.Module
 import dagger.Provides
 import javax.inject.Named
@@ -22,6 +23,16 @@ class FakeAppModule {
     @Provides
     fun localDataSourceProvider(): LocalDataSource =
         FakeLocalDataSource()
+
+    @Provides
+    @Singleton
+    @Named("baseUrl")
+    fun baseUrlProvider(): String = "https://api.themoviedb.org/3/"
+
+    @Provides
+    @Singleton
+    fun retrofitAPIProvider(
+        @Named("baseUrl") baseUrl: String) = RetrofitAPI(baseUrl)
 
     @Singleton
     @Provides

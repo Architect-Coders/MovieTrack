@@ -13,7 +13,7 @@ android {
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "com.afrasilv.movietrack.ui.UiRunner"
     }
     buildTypes {
         release {
@@ -86,5 +86,15 @@ dependencies {
     testImplementation "android.arch.core:core-testing:1.1.1"
     testImplementation "com.google.dagger:dagger:${dagger}"
     kaptTest "com.google.dagger:dagger-compiler:${dagger}"
+    androidTestImplementation 'androidx.test:rules:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.2.0'
+    androidTestImplementation 'com.squareup.okhttp3:mockwebserver:4.2.1'
+    androidTestImplementation 'com.jakewharton.espresso:okhttp3-idling-resource:1.0.0'
+    androidTestImplementation 'androidx.test.ext:junit-ktx:1.1.1'
 
+    testImplementation "com.google.dagger:dagger:${dagger}"
+    kaptTest "com.google.dagger:dagger-compiler:${dagger}"
+
+    androidTestImplementation "com.google.dagger:dagger:${dagger}"
+    kaptAndroidTest "com.google.dagger:dagger-compiler:${dagger}"
 }
