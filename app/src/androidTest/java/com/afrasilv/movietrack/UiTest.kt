@@ -7,10 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
-import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -76,7 +74,7 @@ class UiTest {
 
     @ExperimentalTime
     @Test
-    fun checkIfHasElementsInView() {
+    fun checkTitleToolbarAfterSelectMovie() {
         server.enqueue(
             MockResponse()
                 .setResponseCode(200)
@@ -94,6 +92,85 @@ class UiTest {
 
         onView(withId(R.id.detailsTitleToolbar))
             .check(matches(hasDescendant(withText("Sonic the Hedgehog"))))
+    }
+
+    @ExperimentalTime
+    @Test
+    fun checkBenSchwartzActorNameToolbar() {
+        server.enqueue(
+            MockResponse()
+                .setResponseCode(200)
+                .setBody(popularMovies)
+        )
+
+        SystemClock.sleep(1000)
+
+        server.enqueue(
+            MockResponse()
+                .setResponseCode(200)
+                .setBody(sonicCredits)
+        )
+
+        onView(withId(R.id.home_list)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                0,
+                ViewActions.click()
+            )
+        )
+
+        SystemClock.sleep(1000)
+
+        onView(withId(R.id.cast_list)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                0,
+                ViewActions.click()
+            )
+        )
+
+        onView(withId(R.id.detailsTitleToolbar))
+            .check(matches(hasDescendant(withText("Ben Schwartz"))))
+
+    }
+
+
+    @ExperimentalTime
+    @Test
+    fun checkJimCarreyActorNameToolbar() {
+        server.enqueue(
+            MockResponse()
+                .setResponseCode(200)
+                .setBody(popularMovies)
+        )
+
+        SystemClock.sleep(1000)
+
+        server.enqueue(
+            MockResponse()
+                .setResponseCode(200)
+                .setBody(sonicCredits)
+        )
+
+        onView(withId(R.id.home_list)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                0,
+                ViewActions.click()
+            )
+        )
+
+        SystemClock.sleep(1000)
+
+        onView(withId(R.id.toolbar)).perform(ViewActions.swipeUp())
+        onView(withId(R.id.movie_data_scroll)).perform(ViewActions.swipeUp())
+
+        onView(withId(R.id.cast_list)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                2,
+                ViewActions.click()
+            )
+        )
+
+        onView(withId(R.id.detailsTitleToolbar))
+            .check(matches(hasDescendant(withText("Jim Carrey"))))
 
     }
 }

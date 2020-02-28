@@ -12,10 +12,10 @@ open class MovieTrackApp : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        component = initMoviesComponent()
+        component = initMoviesComponent(this)
     }
 
-    open fun initMoviesComponent() = DaggerMoviesComponent
+    open fun initMoviesComponent(app: Application) = DaggerMoviesComponent
         .factory()
-        .create(this)
+        .create(app)
 }
